@@ -5,7 +5,7 @@
 - Based in Medellín, Colombia.
 - Founder: Esteban Estrada, Founder & Director. X: @Codestz_Dev. Site: https://codestz.dev
 - Studio X: @silentthreadhq. GitHub: https://github.com/silentthreadstudio
-- Contact and press: silentthreadhq@gmail.com
+- Contact and press: hello@silentthreadstudio.com
 - The name is two words, both capitalised: Silent Thread.
 
 ## Games
@@ -25,5 +25,7 @@ Open-source tools for AI coding agents, by the founder:
 
 - [Home](https://silentthreadstudio.com/): the studio, the founder, the work, the road so far, contact.
 - [About](https://silentthreadstudio.com/about): the origin of the name, the mark, how the studio works.
+- [Devlog](https://silentthreadstudio.com/devlog): notes from the studio and Raccoon Heist development. RSS: https://silentthreadstudio.com/devlog/rss.xml
 - [Press](https://silentthreadstudio.com/press): logos, colours, type and contact.
+- [Privacy](https://silentthreadstudio.com/privacy): what the site collects and your rights.
 - [Brand and design system](https://github.com/silentthreadstudio/brand)
