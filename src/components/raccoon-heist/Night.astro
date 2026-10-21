@@ -244,7 +244,7 @@ const RAIN = Array.from({ length: 16 }, (_, i) => ({ fx: ((i * 0.618) % 1) * 0.9
   .rain { --x0: calc(var(--sw) * var(--fx)); --y0: calc(var(--rh) + 120); --x1: calc(var(--side) + var(--rw) * 0.2); --y1: calc(var(--floor) + var(--rh) * 0.4); --arc: 20; --spin: 0; }
   .pop-gold { --px0: calc(var(--side) + var(--rw) * 0.2); --py0: calc(var(--floor) + var(--rh) * 0.62); --o: 1; --t: 0.4; }
 
-  /* Pay: Rocco hands over the sack; the Boss tips his hat; first light. */
+  /* Pay: Rocco hands over an envelope of gold; the Boss tips his hat; first light. */
   .scene-pay { --gap: 70; --sw: calc(var(--rw) + var(--gap) + var(--vw)); --sh: calc(max(var(--rh), var(--vh)) + 30); }
   .boss-full { position: absolute; bottom: calc(var(--floor) * var(--U)); left: calc((var(--rw) + var(--gap)) * var(--U)); line-height: 0; }
   .dawn-light {
