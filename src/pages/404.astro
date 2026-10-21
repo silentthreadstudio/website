@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import ErrorPage from '../components/ErrorPage.astro';
+---
+
+<Base title="Not found | Silent Thread" description="This page does not exist on silentthreadstudio.com." noindex>
+  <ErrorPage
+    code="404"
+    title="This thread goes nowhere."
+    links={[
+      { label: 'Back to the studio', href: '/' },
+      { label: 'Raccoon Heist', href: '/games/raccoon-heist' },
+      { label: 'Contact', href: '/#contact' },
+    ]}
+  >
+    <p>The page moved, or it never existed. Either way, nothing is running here.</p>
+  </ErrorPage>
+</Base>

@@ -1,0 +1,56 @@
+---
+// Shared body for the error pages: the mark's thread, cut, with its weight on the floor.
+// Static, no script; works the same in both colour modes and with reduced motion.
+interface Props {
+  code: string;
+  title: string;
+  links: { label: string; href: string }[];
+}
+
+const { code, title, links } = Astro.props;
+---
+
+<section class="section err" aria-labelledby="err-title">
+  <div class="err-thread" aria-hidden="true">
+    <span class="err-line"></span>
+    <span class="err-end"></span>
+    <span class="err-weight"></span>
+  </div>
+  <div class="err-copy">
+    <p class="label">Error {code}</p>
+    <h1 id="err-title" class="h2">{title}</h1>
+    <div class="prose"><slot /></div>
+    <ul class="err-links">
+      {links.map((l) => <li><a class="link" href={l.href}>{l.label}</a></li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .err {
+    min-height: 100svh; border-top: 0;
+    padding-top: calc(var(--header-h) + 10vh);
+    display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(2rem, 8vw, 8rem); align-items: start;
+  }
+  /* The thread hangs from the header, stops short, and the weight lies on the floor below. */
+  .err-thread { position: relative; width: 24px; align-self: stretch; min-height: 60svh; margin-top: calc(-10vh - 12px); }
+  .err-line { position: absolute; left: 50%; top: 0; height: 38%; width: 2px; transform: translateX(-50%); background: var(--fg); }
+  .err-end {
+    position: absolute; left: 50%; top: 38%; width: 10px; height: 2px; transform: translateX(-50%) rotate(-28deg);
+    background: var(--fg);
+  }
+  .err-weight {
+    position: absolute; left: calc(50% + 14px); bottom: 0; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--fg);
+  }
+  .err-thread::after {
+    content: ''; position: absolute; left: -12px; bottom: -2px; width: 64px; height: 2px; background: var(--line);
+  }
+  .err-copy { display: grid; gap: 1.4rem; max-width: 40rem; }
+  .err-copy .prose :global(p) { margin: 0; color: var(--fg-2); }
+  .err-links { list-style: none; margin: 0.6rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.8rem 2rem; }
+  @media (max-width: 600px) {
+    .err { grid-template-columns: minmax(0, 1fr); }
+    .err-thread { display: none; }
+  }
+</style>

@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import ErrorPage from '../components/ErrorPage.astro';
+---
+
+<Base title="Server error | Silent Thread" description="Something went wrong on silentthreadstudio.com." noindex>
+  <ErrorPage
+    code="500"
+    title="Something snapped."
+    links={[
+      { label: 'Back to the studio', href: '/' },
+      { label: 'Status on X @silentthreadhq', href: 'https://x.com/silentthreadhq' },
+    ]}
+  >
+    <p>The fault is on our side, not yours. Give it a minute and try again.</p>
+  </ErrorPage>
+</Base>
