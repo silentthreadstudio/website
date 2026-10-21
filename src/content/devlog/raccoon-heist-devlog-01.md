@@ -7,7 +7,7 @@ tags: [raccoon-heist, devlog]
 game: raccoon-heist
 number: 1
 cover: "/devlog/devlog-01-cover.png"
-coverAlt: "Rocco the raccoon holds a coin sack on the casino carpet between two rat thugs in black suits, while a dice goon hops past slot machines and a roulette table."
+coverAlt: "Rocco the raccoon, a coin pouch on his belt, stands on the casino carpet between two rat thugs in black suits, while a dice goon hops past slot machines and a roulette table."
 coverLabel: "Concept art"
 draft: false
 ---
