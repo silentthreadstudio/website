@@ -17,7 +17,7 @@ const mail = `mailto:${CONTACT_EMAIL}`;
       <h1 id="privacy-title" class="h2">Privacy.</h1>
     </div>
     <div class="prose">
-      <p>Short version: no ads, no analytics, no tracking cookies. If you give us your email, we use it to send studio news and nothing else, and you can have it deleted at any time.</p>
+      <p>Short version: no ads, no tracking cookies, only anonymous visit counts. If you give us your email, we use it to send studio news and nothing else, and you can have it deleted at any time.</p>
 
       <h2>Who is responsible</h2>
       <p>Silent Thread, run by Esteban Estrada, Medellín, Colombia. Email: <a href={mail}>{CONTACT_EMAIL}</a>. Every request about your data goes to that address.</p>
@@ -27,6 +27,7 @@ const mail = `mailto:${CONTACT_EMAIL}`;
         <li><strong>Newsletter.</strong> Your email address, only if you subscribe. Used to send news about Silent Thread and its games. Never sold, never shared for anyone else's marketing.</li>
         <li><strong>Email you send us.</strong> Kept in our inbox so we can reply. Not added to the newsletter.</li>
         <li><strong>Your browser.</strong> The site saves two settings in your browser's local storage: your light or dark mode choice, and whether you have already seen the opening animation. They never leave your device.</li>
+        <li><strong>Visits.</strong> Vercel Web Analytics and Speed Insights count page views and measure how fast pages load: the page, the site that linked to it, country, browser, device type and load times. No cookies and no profile of you. Visits are told apart only by a hash that resets every day, and IP addresses are not stored.</li>
       </ul>
 
       <h2>Consent</h2>
@@ -35,7 +36,7 @@ const mail = `mailto:${CONTACT_EMAIL}`;
       <h2>Who handles it for us</h2>
       <ul>
         <li><a href="https://kit.com/privacy" rel="noopener">Kit</a> stores the subscriber list and sends the newsletter.</li>
-        <li><a href="https://vercel.com/legal/privacy-notice" rel="noopener">Vercel</a> hosts the site and keeps standard server logs, such as IP address and browser, to run and protect it.</li>
+        <li><a href="https://vercel.com/legal/privacy-notice" rel="noopener">Vercel</a> hosts the site and keeps standard server logs, such as IP address and browser, to run and protect it. It also runs the visit counts and speed measurements above.</li>
         <li>Email to us is received and stored by Google (Gmail), forwarded by ImprovMX.</li>
       </ul>
       <p>These providers store data outside Colombia, mainly in the United States. By subscribing or writing to us, you authorize that transfer.</p>
