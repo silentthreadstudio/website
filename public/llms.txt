@@ -1,0 +1,29 @@
+# Silent Thread
+
+> Silent Thread is a game studio and dev-tools Lab from Colombia, founded by Esteban Estrada. It started as the work he did after hours. First game: Raccoon Heist, coming to Steam. Tagline: Quiet name. Loud worlds.
+
+- Based in Medellín, Colombia.
+- Founder: Esteban Estrada, Founder & Director. X: @Codestz_Dev. Site: https://codestz.dev
+- Studio X: @silentthreadhq. GitHub: https://github.com/silentthreadstudio
+- Contact and press: silentthreadhq@gmail.com
+- The name is two words, both capitalised: Silent Thread.
+
+## Games
+
+- [Raccoon Heist](https://silentthreadstudio.com/games/raccoon-heist): A raccoon wins the worst casino in town. The Rat Mob wants their cut. A heist roguelite: defend the casino every night and pay the Rat Boss, Don Vermino, by dawn. In development, coming to Steam. No release date announced.
+
+## The Lab
+
+Open-source tools for AI coding agents, by the founder:
+
+- [Guildhall](https://github.com/Codestz/guildhall): Code repositories as living 3D worlds.
+- [Cockpit](https://github.com/Codestz/opencode-cockpit): Shells that keep running, subagents you can watch, a PR in the terminal.
+- [mcpx](https://github.com/Codestz/mcpx): MCP servers as CLI tools, built for AI agents.
+- [Hindsight](https://github.com/Codestz/claude-hindsight): Claude Code transcripts as interactive visualizations.
+
+## Pages
+
+- [Home](https://silentthreadstudio.com/): the studio, the founder, the work, the road so far, contact.
+- [About](https://silentthreadstudio.com/about): the origin of the name, the mark, how the studio works.
+- [Press](https://silentthreadstudio.com/press): logos, colours, type and contact.
+- [Brand and design system](https://github.com/silentthreadstudio/brand)
