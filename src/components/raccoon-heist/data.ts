@@ -1,5 +1,6 @@
 // Raccoon Heist game page: sprite sheets and copy.
-// Art: the website sprite set + the teaser layers, one pixel density.
+// Art: key-art stills (hd tier, 1 px per art pixel), the teaser layers, and the in-game sheets from asset pass 1
+// (exported at 2x nearest, so 2 px per art pixel). Cells are exact px, straight from the export's sheets.json.
 // coin_m (teaser coin at 1/3, alpha snapped) and cards_s (teaser cards halved, nearest) are the particle
 // sheets: small enough to read as coins and cards next to the cast, with hard pixel edges. Copy and numbers follow the game's current design.
 
@@ -24,12 +25,14 @@ export const SHEETS = {
   rat_thug: hd('rat_thug', 1, [177, 303]),
   rats_right_pair: hd('rats_right_pair', 1, [316, 361]),
   vermino: hd('vermino', 2, [255, 300]),
-  vermino_bust: hd('vermino_bust', 6, [116, 190], 4),
-  slot_machine: hd('slot_machine', 7, [114, 220], 8),
-  lockbox: hd('lockbox', 5, [95, 110], 10),
-  charm_icons: hd('charm_icons', 5, [90, 96]),
-  deal_icons: hd('deal_icons', 5, [90, 96]),
-  power_icons: hd('power_icons', 3, [103, 96]),
+  // In-game sheets (asset pass 1). vermino_bust: idle 0-3, talk 4-5. slot_machine: idle 0-1, pull 2-4, payout 5-6.
+  // lockbox: locked, unlock, ajar, light, loot.
+  vermino_bust: hd('vermino_bust', 6, [238, 264], 6),
+  slot_machine: hd('slot_machine', 7, [220, 272], 8),
+  lockbox: hd('lockbox', 5, [144, 120], 10),
+  charm_icons: hd('charm_icons', 5, [102, 104]),
+  deal_icons: hd('deal_icons', 5, [112, 104]),
+  power_icons: hd('power_icons', 3, [104, 104]),
   coin: hd('coin_m', 6, [27, 26], 10),
   cards: hd('cards_s', 4, [53, 61]),
 } satisfies Record<string, Sheet>;
@@ -60,17 +63,19 @@ export const CHARMS = [
   { name: 'House Key', rarity: 'rare', line: 'Every wave hides a box.' },
 ];
 
-/** deal_icons frames 0-2: each card's upside and its catch. */
+/** deal_icons frames 0-4, in order: each card's upside and its catch (copy from the game's strings). */
 export const DEALS = [
   { name: 'Fat Envelope', rarity: 'uncommon', up: 'Gold per coin +50%', down: 'Rat thugs move 20% faster' },
-  { name: "The Boss's Loan", rarity: 'uncommon', up: 'A pile of gold, right now', down: "Next night's demand +25%" },
+  { name: "The Boss's Loan", rarity: 'uncommon', up: 'A big stack of gold, right now', down: "Next night's protection +25%" },
   { name: 'Glass Jaw', rarity: 'rare', up: 'Weapon damage +40%', down: 'Max HP -3' },
+  { name: 'Shiny Hunting', rarity: 'uncommon', up: 'Shinies show up 3× as often', down: 'Shinies have 2× HP' },
+  { name: 'Rigged Machines', rarity: 'uncommon', up: 'Machine prices -50%', down: 'Machines bust more often' },
 ];
 
 export const CAST = [
   { sheet: 'rocco_hero' as const, name: 'Rocco', tag: '"The Bandit"', line: 'Small-time thief. Too lucky to be honest.' },
   { sheet: 'rat_dealer' as const, name: 'The Card Shark', line: 'Keeps his distance. Flicks cards. Tuts.' },
-  { sheet: 'rat_thug' as const, name: 'The Thug', line: 'Hired muscle in a tux. Paid in advance.' },
+  { sheet: 'rat_thug' as const, name: 'The Thug', line: 'Hired muscle in a black suit. Paid in advance.' },
   { sheet: 'rats_right_pair' as const, name: 'Loan Shark & Bouncer', line: '"Interest!" / "Name\'s not on the list."' },
   { sheet: 'vermino' as const, frame: 1, name: 'Don Vermino', line: 'A reasonable rat. Wants his envelope.', boss: true },
 ];

@@ -41,8 +41,8 @@ const [bw, bh] = SHEETS.vermino_bust.cell;
     --px: 1;
     display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: center;
   }
-  @media (min-width: 1000px) { .catch-grid { --px: 2; } }
-  @media (min-width: 1240px) and (min-height: 760px) { .catch-grid { --px: 3; } }
+  /* The bust sheet is 2 px per art pixel at --px 1. */
+  @media (min-width: 1240px) and (min-height: 760px) { .catch-grid { --px: 2; } }
 
   /* His office: a lamp pool on the wall, the bust behind a desk. */
   .office {

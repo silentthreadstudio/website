@@ -46,7 +46,8 @@ import { ROOMS } from './data';
     background: var(--line-g);
   }
   .room[data-built='true']:not(:last-child)::after { height: 4px; margin-top: -1px; background: var(--gold); }
-  .rooms { --art-h: clamp(110px, 10vw, 150px); }
+  /* Tall enough for the vault's lockbox (120 px) at every width. */
+  .rooms { --art-h: clamp(128px, 10vw, 150px); }
   .room-art {
     position: relative; display: grid; place-items: center; height: var(--art-h); overflow: hidden;
     background: url('/raccoon-heist/background.webp') var(--cx, 50%) var(--cy, 50%) / 688px 384px no-repeat, var(--ink);
