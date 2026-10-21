@@ -1,0 +1,26 @@
+# deps and builds
+node_modules/
+dist/
+.astro/
+.vercel/
+.output/
+
+# env and secrets
+.env
+.env.*
+!.env.example
+
+# os and editors
+.DS_Store
+*.log
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# local tooling
+.agentry/
+
+# local agent instructions: never commit
+CLAUDE.md
+CLAUDE.local.md
+.claude/

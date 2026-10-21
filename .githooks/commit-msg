@@ -1,0 +1,22 @@
+#!/bin/sh
+# Rejects AI attribution and non-conventional commit messages.
+msg_file="$1"
+msg=$(grep -v '^#' "$msg_file")
+
+if printf '%s\n' "$msg" | grep -iqE 'co-authored-by:.*(claude|anthropic|openai|copilot|gpt|gemini|\bai\b)|claude-session|generated (with|by) (claude|ai)|noreply@anthropic|🤖'; then
+  echo "commit-msg: AI attribution is not allowed. Remove it." >&2
+  exit 1
+fi
+
+subject=$(printf '%s\n' "$msg" | sed -n '1p')
+case "$subject" in Merge\ *|Revert\ *) exit 0 ;; esac
+
+if ! printf '%s' "$subject" | grep -qE '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9._/-]+\))?!?: [a-z0-9](.*[^.])?$'; then
+  echo "commit-msg: use 'type(scope): summary', lowercase, no trailing period." >&2
+  exit 1
+fi
+
+if [ "${#subject}" -gt 72 ]; then
+  echo "commit-msg: subject is ${#subject} chars, max 72." >&2
+  exit 1
+fi
