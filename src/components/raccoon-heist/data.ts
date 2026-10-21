@@ -17,10 +17,10 @@ const hd = (id: string, frames: number, cell: [number, number], fps = 1): Sheet 
 
 export const SHEETS = {
   // Key-art Rocco only. Never rocco_cast / rocco_shrug.
-  rocco_hero: hd('rocco_hero', 1, [239, 302]),
+  rocco_hero: hd('rocco_hero', 1, [243, 302]),
   rocco_fight: hd('rocco_fight', 1, [289, 302]),
-  rocco_coins: hd('rocco_coins', 1, [213, 302]),
-  rocco_payup: hd('rocco_payup', 1, [233, 302]),
+  rocco_coins: hd('rocco_coins', 1, [240, 302]),
+  rocco_payup: hd('rocco_payup', 1, [241, 302]),
   rat_dealer: hd('rat_dealer', 1, [202, 317]),
   rat_thug: hd('rat_thug', 1, [177, 303]),
   rats_right_pair: hd('rats_right_pair', 1, [316, 361]),
