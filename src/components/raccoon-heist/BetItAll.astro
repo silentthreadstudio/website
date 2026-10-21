@@ -128,8 +128,8 @@ const START_REELS = ['cherry', 'seven', 'bell'] as const;
     display: grid; gap: clamp(18px, 2.4vw, 28px);
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
-  /* The in-game sheets are 2 px per art pixel at --px 1; only the slot machine steps up, on big screens. */
-  @media (min-width: 1240px) and (min-height: 760px) { .slot { --px: 2; } }
+  /* The in-game sheets are 2 px per art pixel at --px 1. The slot stays at 1: at 2 (440 px wide) it leaves
+     its controls no room in a 7-of-12 column, even at the widest wrap. */
 
   .item-title { margin: 0; font: 700 clamp(1.1rem, 1.7vw, 1.4rem)/1.1 var(--pixel); text-transform: uppercase; color: var(--gold-l); }
   .item-text { margin: 0; color: var(--text-dim); line-height: 1.5; max-width: 44ch; }
