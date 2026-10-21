@@ -64,3 +64,20 @@ export const breadcrumb = (trail: { name: string; path: string }[]): Node => ({
     '@type': 'ListItem', position: i + 1, name: c.name, item: abs(c.path),
   })),
 });
+
+export const blogPosting = (p: {
+  path: string; title: string; description: string; published?: Date; updated?: Date; image?: string;
+}): Node => ({
+  '@type': 'BlogPosting',
+  '@id': abs(`${p.path}#post`),
+  headline: p.title,
+  description: p.description,
+  url: abs(p.path),
+  mainEntityOfPage: abs(p.path),
+  ...(p.published && { datePublished: p.published.toISOString() }),
+  ...((p.updated ?? p.published) && { dateModified: (p.updated ?? p.published)!.toISOString() }),
+  ...(p.image && { image: abs(p.image) }),
+  inLanguage: 'en',
+  author: { '@id': FOUNDER_ID },
+  publisher: { '@id': ORG_ID },
+});

@@ -1,0 +1,57 @@
+---
+// A post's cover: the real image with its label, or, while the image is still being made,
+// a placeholder that says what will go there. Also styles the in-post placeholders (.post-ph).
+import { cover as getCover, type Post } from '../lib/devlog';
+
+interface Props {
+  post: Post;
+  /** Above the fold on the post page: load it first. */
+  eager?: boolean;
+}
+
+const { post, eager = false } = Astro.props;
+const c = getCover(post);
+---
+
+{c && (
+  <figure class:list={['post-fig', 'post-cover', { 'is-todo': c.todo }]}>
+    {c.todo ? (
+      <div class="post-ph">
+        {c.label && <span class="post-label">{c.label}</span>}
+        <span class="post-ph-note">Cover to come</span>
+        <span class="post-ph-what">{c.what}</span>
+      </div>
+    ) : (
+      <div class="post-img">
+        <img src={c.src} alt={c.alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+        {c.label && <span class="post-label">{c.label}</span>}
+      </div>
+    )}
+  </figure>
+)}
+
+<style is:global>
+  /* Shared by covers and by images inside posts. */
+  .post-fig { position: relative; margin: 2.4rem 0; }
+  /* Pixel art keeps its own size (never stretched to fit); the frame uses the art's night floor colour. */
+  .post-img { position: relative; display: grid; place-items: center; background: #1B1830; padding: 1.6rem 1rem; }
+  .post-img img { display: block; max-width: 100%; height: auto; image-rendering: pixelated; }
+  .post-cover .post-img { padding: 0; }
+  .post-cover .post-img img { width: 100%; }
+  .post-label {
+    position: absolute; right: 10px; top: 10px; z-index: 1;
+    font: 600 0.62rem/1 var(--font-mono); letter-spacing: var(--tracking-label); text-transform: uppercase;
+    color: var(--fg); background: var(--bg); padding: 6px 8px;
+  }
+  .post-fig figcaption { margin-top: 0.7rem; font: 500 0.78rem/1.4 var(--font-mono); letter-spacing: 0.04em; color: var(--fg-3); }
+
+  /* Placeholder: a dashed frame the size of a wide image, saying what goes there. */
+  .post-ph {
+    position: relative; display: grid; align-content: center; gap: 0.6rem; min-height: 220px;
+    aspect-ratio: 16 / 9; padding: 2.2rem 1.6rem 1.6rem;
+    border: 1px dashed var(--fg-3); background: repeating-linear-gradient(-45deg, transparent 0 14px, var(--surface) 14px 15px);
+  }
+  .post-ph-note { font: 600 0.72rem/1 var(--font-mono); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--fg-2); }
+  .post-ph-what { max-width: 52ch; font-size: 0.95rem; line-height: 1.5; color: var(--fg-3); }
+  @media (max-width: 560px) { .post-ph { aspect-ratio: auto; min-height: 200px; } }
+</style>

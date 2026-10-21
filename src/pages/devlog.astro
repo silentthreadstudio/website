@@ -1,17 +1,63 @@
 ---
 import Base from '../layouts/Base.astro';
+import DevlogCover from '../components/DevlogCover.astro';
+import { breadcrumb } from '../lib/schema';
+import { getPosts, postUrl, kicker, formatDate, SHOW_DRAFTS } from '../lib/devlog';
+
+const posts = await getPosts();
 ---
 
-<Base title="Devlog | Silent Thread" description="Notes from the night shift at Silent Thread." noindex>
+<!-- Hidden from search (noindex + UNLISTED in astro.config.mjs) until the first post launches. -->
+<Base title="Devlog | Silent Thread" description="Notes from the night shift at Silent Thread." noindex schema={[breadcrumb([{ name: 'Devlog', path: '/devlog' }])]}>
+  <link slot="head" rel="alternate" type="application/rss+xml" title="Silent Thread devlog" href="/devlog/rss.xml" />
   <section class="section devlog" aria-labelledby="devlog-title">
     <div class="sec-head">
       <p class="label">Devlog</p>
       <h1 id="devlog-title" class="h2">Notes from the night shift.</h1>
     </div>
-    <p class="prose">No entries yet. The first one is being written after hours. <a class="link" href="https://x.com/silentthreadhq" rel="me noopener">Follow on X <span aria-hidden="true">↗</span></a></p>
+    {SHOW_DRAFTS && posts.some((p) => p.data.draft) && (
+      <p class="draft-note">Dev preview: drafts are shown here and nowhere in the production build.</p>
+    )}
+    {posts.length === 0 ? (
+      <p class="prose">No entries yet. The first one is being written after hours. <a class="link" href="https://x.com/silentthreadhq" rel="me noopener">Follow on X <span aria-hidden="true">↗</span></a></p>
+    ) : (
+      <ol class="posts">
+        {posts.map((p) => (
+          <li>
+            <a class="post-card" href={postUrl(p)}>
+              <DevlogCover post={p} />
+              <span class="card-meta">
+                <span class="label">{kicker(p)}{p.data.draft && <span class="draft-chip">Draft</span>}</span>
+                <span class="card-title">{p.data.title}</span>
+                <span class="card-desc">{p.data.description}</span>
+                <span class="card-date">{formatDate(p.data.pubDate)}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    )}
   </section>
 </Base>
 
 <style>
   .devlog { padding-top: calc(var(--header-h) + 12vh); border-top: 0; min-height: 70svh; }
+  .draft-note { margin: -1.5rem 0 2.5rem; font: 600 0.72rem/1.4 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); }
+  .posts { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--surface); border: 1px solid var(--surface); max-width: 72rem; }
+  .post-card {
+    display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 2rem; align-items: center;
+    padding: 1.6rem; background: var(--bg); color: inherit; text-decoration: none;
+  }
+  .post-card :global(.post-fig) { margin: 0; }
+  .post-card :global(.post-ph) { min-height: 0; padding: 1.4rem 1.2rem 1.2rem; }
+  .post-card :global(.post-ph-what) { display: none; }
+  .card-meta { display: grid; gap: 0.7rem; align-content: center; }
+  .card-title { font: 800 clamp(1.4rem, 2.4vw, 2rem)/1.05 var(--font-display); font-stretch: 115%; text-wrap: balance; }
+  .card-desc { color: var(--fg-2); line-height: 1.5; max-width: 52ch; }
+  .card-date { font: 600 0.7rem var(--font-mono); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--fg-3); }
+  .post-card:hover .card-title { text-decoration: underline 1px var(--signal); text-underline-offset: 6px; }
+  .draft-chip { margin-left: 0.8rem; padding: 3px 6px; border: 1px solid var(--fg-3); color: var(--fg-2); letter-spacing: 0.12em; }
+  @media (max-width: 760px) {
+    .post-card { grid-template-columns: minmax(0, 1fr); gap: 1.2rem; padding: 1.2rem; }
+  }
 </style>

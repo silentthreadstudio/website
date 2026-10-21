@@ -22,6 +22,8 @@ interface Props {
   schema?: Record<string, unknown>[];
   /** Error pages and empty sections: keep out of search results. */
   noindex?: boolean;
+  /** 'article' for devlog posts. */
+  ogType?: 'website' | 'article';
   /** Studio pages preload Archivo and JetBrains Mono; game pages bring their own type. */
   preloadFonts?: boolean;
 }
@@ -34,6 +36,7 @@ const {
   ogImageAlt = 'Silent Thread wordmark. Games and developer tools, Colombia.',
   schema = [],
   noindex = false,
+  ogType = 'website',
   preloadFonts = true,
 } = Astro.props;
 // Pages build to about.html; the public URL is /about (vercel.json cleanUrls).
@@ -61,7 +64,7 @@ const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': [stu
     <link rel="icon" href="/icon-32.png" sizes="32x32" />
     <link rel="icon" href="/icon-16.png" sizes="16x16" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
