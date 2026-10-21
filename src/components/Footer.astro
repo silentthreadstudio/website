@@ -1,0 +1,17 @@
+---
+import wordmark from '../assets/wordmark.svg?raw';
+import { SOCIAL } from '../site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <a class="footer-mark" href="/" aria-label="Silent Thread, home" set:html={wordmark} />
+    <p class="footer-tag">Quiet name. Loud worlds.</p>
+  </div>
+  <ul class="footer-links">
+    {SOCIAL.map((s) => <li><a href={s.href} rel="me noopener">{s.label}</a></li>)}
+  </ul>
+  <p class="footer-legal">© {year} Silent Thread. Made in Colombia, after hours.</p>
+</footer>

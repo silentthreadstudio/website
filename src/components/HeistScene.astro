@@ -1,0 +1,51 @@
+---
+// Raccoon Heist concept art, composed from the true-pixel teaser layers (688x384).
+// Static by default (the final frame). The game page animates the data-layer hooks.
+interface Props {
+  eager?: boolean;
+  class?: string;
+}
+
+const { eager = false, class: className } = Astro.props;
+const loading = eager ? 'eager' : 'lazy';
+const layers = [
+  { id: 'background', alt: '' },
+  { id: 'eyes', alt: '' },
+  { id: 'rats-left', alt: '' },
+  { id: 'rats-right', alt: '' },
+  { id: 'rocco', alt: '' },
+];
+---
+
+<figure class:list={['heist', className]} data-heist>
+  <div class="heist-frame" role="img" aria-label="Concept art: Rocco the raccoon strikes a pose on a spotlit casino stage while Don Vermino's Rat Mob and dozens of glowing eyes watch from the dark.">
+    {layers.map((l) => (
+      <img src={`/raccoon-heist/${l.id}.webp`} alt={l.alt} width="688" height="384" loading={loading} decoding="async" fetchpriority={l.id === 'background' && eager ? 'high' : 'low'} class={`hl hl-${l.id}`} data-layer={l.id} />
+    ))}
+    <slot />
+  </div>
+  <figcaption class="heist-cap">Concept art</figcaption>
+</figure>
+
+<style>
+  .heist { position: relative; margin: 0; }
+  .heist-frame {
+    position: relative; aspect-ratio: 688 / 384; overflow: hidden; background: #0d0709;
+    max-width: 100%;
+  }
+  .hl {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    /* Every layer crops the same way, so they stay aligned in any frame shape. */
+    object-fit: cover; object-position: 50% 60%;
+    image-rendering: pixelated; user-select: none; pointer-events: none;
+  }
+  /* The composition from the layers README: rats x0.72 at the edges, Rocco x0.78 centred. */
+  .hl-rats-left { transform: scale(0.72); transform-origin: 0% 100%; }
+  .hl-rats-right { transform: scale(0.72); transform-origin: 100% 100%; }
+  .hl-rocco { transform: scale(0.78); transform-origin: 50% 96%; }
+  .heist-cap {
+    position: absolute; right: 10px; bottom: 10px;
+    font: 600 0.62rem/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase;
+    color: #ECE6D6; background: rgb(11 11 14 / 0.72); padding: 6px 8px;
+  }
+</style>

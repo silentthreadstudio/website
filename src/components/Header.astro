@@ -1,0 +1,41 @@
+---
+import wordmark from '../assets/wordmark.svg?raw';
+
+const nav = [
+  { href: '/#work', label: 'Work' },
+  { href: '/about', label: 'About' },
+  { href: '/#contact', label: 'Contact' },
+];
+---
+
+<header class="site-header">
+  <a class="site-mark" href="/" aria-label="Silent Thread, home" set:html={wordmark} />
+  <div class="site-tools">
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+    <button class="mode-toggle" type="button" data-mode-toggle aria-label="Switch to light mode">
+      <span class="mode-dot" aria-hidden="true"></span><span class="mode-text" data-mode-text>Light</span>
+    </button>
+  </div>
+</header>
+
+<script>
+  // Colour mode: follows the system until the visitor picks one; the pick is remembered.
+  const root = document.documentElement;
+  const btn = document.querySelector<HTMLButtonElement>('[data-mode-toggle]');
+  const text = document.querySelector('[data-mode-text]');
+  const sync = () => {
+    const light = root.dataset.mode === 'light';
+    if (text) text.textContent = light ? 'Dark' : 'Light';
+    btn?.setAttribute('aria-label', `Switch to ${light ? 'dark' : 'light'} mode`);
+  };
+  sync();
+  btn?.addEventListener('click', () => {
+    root.dataset.mode = root.dataset.mode === 'light' ? 'dark' : 'light';
+    try { localStorage.setItem('st-mode', root.dataset.mode); } catch {}
+    sync();
+  });
+</script>

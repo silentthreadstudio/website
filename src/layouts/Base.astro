@@ -1,0 +1,108 @@
+---
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/tokens.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../site';
+import { studio, website } from '../lib/schema';
+import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+import monoLatin from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Game pages bring their own world; the studio frame (header, footer) stays shared. */
+  theme?: 'studio' | 'heist';
+  ogImage?: string;
+  /** Describes ogImage for screen readers and link previews. */
+  ogImageAlt?: string;
+  /** Extra schema.org nodes for this page; the studio and site nodes are always included. */
+  schema?: Record<string, unknown>[];
+  /** Error pages and empty sections: keep out of search results. */
+  noindex?: boolean;
+  /** Studio pages preload Archivo and JetBrains Mono; game pages bring their own type. */
+  preloadFonts?: boolean;
+}
+
+const {
+  title = `${SITE.name}: Quiet name. Loud worlds.`,
+  description = SITE.description,
+  theme = 'studio',
+  ogImage: ogPath = '/og.png',
+  ogImageAlt = 'Silent Thread wordmark. Games and developer tools, Colombia.',
+  schema = [],
+  noindex = false,
+  preloadFonts = true,
+} = Astro.props;
+// Pages build to about.html; the public URL is /about (vercel.json cleanUrls).
+const canonical = new URL(Astro.url.pathname.replace(/(index)?\.html$/, ''), SITE.url);
+const ogImage = new URL(ogPath, SITE.url);
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': [studio(), website(), ...schema] });
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {!noindex && <link rel="canonical" href={canonical} />}
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {preloadFonts && <link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossorigin />}
+    {preloadFonts && <link rel="preload" href={monoLatin} as="font" type="font/woff2" crossorigin />}
+    <slot name="head" />
+    <meta name="theme-color" content="#0B0B0E" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ECE6D6" media="(prefers-color-scheme: light)" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/icon-32.png" sizes="32x32" />
+    <link rel="icon" href="/icon-16.png" sizes="16x16" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="640" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@silentthreadhq" />
+    <meta name="twitter:creator" content="@Codestz_Dev" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+    <script type="application/ld+json" set:html={jsonLd} />
+    <script is:inline>
+      // Colour mode before first paint: the visitor's pick, else the system setting.
+      try {
+        var m = localStorage.getItem('st-mode');
+        if (m !== 'light' && m !== 'dark') m = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.dataset.mode = m;
+      } catch (e) {}
+    </script>
+    <script is:inline>
+      // The sting plays on a first visit only, and never with reduced motion.
+      try {
+        if (location.pathname === '/' && !localStorage.getItem('st-sting') && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.documentElement.classList.add('sting');
+          localStorage.setItem('st-sting', '1');
+        }
+      } catch (e) {}
+    </script>
+  </head>
+  <body data-theme={theme}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
