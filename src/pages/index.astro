@@ -156,10 +156,10 @@ const pushAt = push
         <form class="signup" action={NEWSLETTER_ENDPOINT} method="post">
           <label for="signup-email">Email</label>
           <div class="signup-row">
-            <input id="signup-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com" />
+            <input id="signup-email" name="email_address" type="email" required autocomplete="email" placeholder="you@example.com" />
             <button type="submit">Subscribe</button>
           </div>
-          <p class="fine">News from the studio. No spam, unsubscribe any time.</p>
+          <p class="fine">News from the studio. No spam, unsubscribe any time. By subscribing you accept the <a href="/privacy">privacy policy</a>.</p>
         </form>
       ) : (
         <p class="contact-lede">News from the studio goes out on X first.<br /><a class="link" href="https://x.com/silentthreadhq" rel="me noopener">Follow @silentthreadhq <span aria-hidden="true">↗</span></a></p>

@@ -15,7 +15,7 @@ export const SOCIAL = [
 ];
 
 // Shown in Contact only when set.
-export const CONTACT_EMAIL = 'silentthreadhq@gmail.com';
+export const CONTACT_EMAIL = 'hello@silentthreadstudio.com';
 
-// Newsletter form posts here. Until a provider is chosen, Contact points to X instead.
-export const NEWSLETTER_ENDPOINT = '';
+// Newsletter form (Kit, double opt-in) posts here. Empty: Contact points to X instead.
+export const NEWSLETTER_ENDPOINT = 'https://app.kit.com/forms/10078209/subscriptions';
