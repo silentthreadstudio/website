@@ -1,0 +1,98 @@
+/* Raccoon Heist game page: the game's own world, in the game's palette and UI.
+   Only the studio header and footer are shared; on this page they sit on the game's night in both colour modes.
+   Default styles are the composed final frame: no JS and reduced motion get a complete page. */
+
+body[data-theme='heist'] {
+  --ink: #14101F; --night: #1B1830; --slate: #2B2747; --slate-hi: #3A3560; --line-g: #57518A;
+  --text-dim: #A8A2C8; --text: #F4EEDC;
+  --gold-d: #C7861E; --gold: #FFC93C; --gold-l: #FFE9A0;
+  --felt-d: #1F6F4A; --felt: #3BB273; --felt-l: #8EE07A;
+  --crim-d: #9B2335; --crim: #E5484D; --crim-l: #FF9A8A;
+  --teal-d: #1B7A93; --teal: #2EC4D6;
+  --neon: #FF4FA3;
+  --prestige: #5E3A9E;
+  --pixel: 'Silkscreen', 'JetBrains Mono Variable', monospace;
+  /* Body copy in the system sans: readable, and zero font bytes on the game's heaviest page.
+     The pixel font carries the game's voice; the studio header and footer keep their own type. */
+  --font-body: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: var(--font-body);
+  /* Studio tokens used by the shared header and footer. */
+  --bg: var(--night); --fg: var(--text); --fg-2: var(--text); --fg-3: var(--text-dim);
+  --surface: var(--slate); --line: var(--slate); --signal: var(--gold);
+  color-scheme: dark;
+  background: var(--ink); color: var(--text);
+  overflow-x: clip;
+}
+body[data-theme='heist'] ::selection { background: var(--gold); color: var(--ink); }
+body[data-theme='heist'] :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+/* ---------- Type ---------- */
+.rh-kicker {
+  margin: 0; font: 400 0.8rem/1.2 var(--pixel); letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold);
+}
+.rh-h2 {
+  margin: 0; font: 700 clamp(1.7rem, 4.2vw, 3.4rem)/1 var(--pixel); text-transform: uppercase;
+  color: var(--gold); text-shadow: 3px 3px 0 var(--ink); text-wrap: balance;
+}
+.rh-lede { margin: 0; max-width: 40ch; font-size: clamp(1.08rem, 1.5vw, 1.3rem); line-height: 1.5; color: var(--text); text-wrap: pretty; }
+.rh-head { display: grid; gap: 1rem; justify-items: start; margin-bottom: clamp(2rem, 5vh, 3.5rem); }
+.rh-head-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.2rem; }
+
+/* ---------- Arcade pieces: 2 px ink outline, hard offset shadow, no blur ---------- */
+.chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  font: 700 0.75rem/1 var(--pixel); text-transform: uppercase; letter-spacing: 0.04em;
+  padding: 8px 10px; border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); color: var(--ink);
+}
+.chip-gold { background: var(--gold); }
+.chip-teal { background: var(--teal); }
+.chip-dim { background: var(--slate-hi); color: var(--text); }
+
+.panel {
+  background: var(--slate); border: 2px solid var(--ink);
+  box-shadow: inset 2px 2px 0 var(--slate-hi), 6px 6px 0 var(--ink);
+}
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px;
+  font: 700 0.95rem/1 var(--pixel); text-transform: uppercase; text-decoration: none; letter-spacing: 0.02em;
+  color: var(--ink); background: var(--gold); padding: 14px 20px;
+  border: 2px solid var(--ink); box-shadow: inset 2px 2px 0 var(--gold-l), 5px 5px 0 var(--ink);
+  transition: transform 80ms steps(2), box-shadow 80ms steps(2), background-color 80ms steps(2);
+}
+.btn:hover { background: var(--gold-l); transform: translate(-1px, -1px); box-shadow: inset 2px 2px 0 #fff, 6px 6px 0 var(--ink); }
+.btn:active { transform: translate(3px, 3px); box-shadow: inset 2px 2px 0 var(--gold-l), 2px 2px 0 var(--ink); }
+.btn:disabled { cursor: not-allowed; background: var(--line-g); color: var(--ink); box-shadow: 5px 5px 0 var(--ink); transform: none; }
+.btn-ghost { background: var(--slate-hi); color: var(--text); box-shadow: inset 2px 2px 0 var(--line-g), 5px 5px 0 var(--ink); }
+.btn-ghost:hover { background: var(--line-g); box-shadow: inset 2px 2px 0 var(--text-dim), 6px 6px 0 var(--ink); }
+
+.link-pixel {
+  font: 700 0.85rem/1 var(--pixel); text-transform: uppercase; color: var(--teal); text-decoration: none;
+  padding: 12px 2px; display: inline-flex; gap: 8px; align-items: center;
+}
+.link-pixel:hover { color: var(--gold-l); text-decoration: underline; text-underline-offset: 6px; }
+
+.rh-sec { position: relative; padding: clamp(80px, 14vh, 160px) var(--side-r) clamp(80px, 14vh, 160px) var(--side-l); }
+.rh-wrap { max-width: 1376px; margin-inline: auto; }
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---------- Motion helpers (only with JS and motion allowed) ---------- */
+/* Before the opening starts, the room is already dark, so the composed frame never flashes.
+   The head script removes .rh-intro after 4 s as a safety net if the page script never runs. */
+html.rh-intro [data-layer='background'] { filter: brightness(0.12); }
+html.rh-intro [data-layer='eyes'],
+html.rh-intro [data-layer='rats-left'],
+html.rh-intro [data-layer='rats-right'] { opacity: 0; }
+html.rh-intro [data-layer='rocco'] { transform: translateY(-120%); }
+
+.drop-coin { animation: rh-coin 0.6s steps(6) infinite; }
+@keyframes rh-coin { to { background-position: calc(var(--cw) * -1) 0; } }
+
+/* The Boss's typed lines: the full line holds the space, the typed copy sits on top. */
+.talk-line .type-ghost { visibility: hidden; }
+.talk-line .type-live { position: absolute; left: 26px; top: 0; right: 0; }
+.talk-line[data-state='wait'] { opacity: 0; }

@@ -1,0 +1,31 @@
+---
+// A pixel grid (one char = one art pixel, see PALETTE) drawn as crisp SVG: one <path> per colour,
+// built from horizontal runs, so an icon costs a handful of nodes instead of one per pixel.
+import { PALETTE } from './data';
+
+interface Props {
+  grid: string[];
+  /** Screen pixels per art pixel. */
+  scale?: number;
+  class?: string;
+}
+
+const { grid, scale = 3, class: cls } = Astro.props;
+const w = Math.max(...grid.map((r) => r.length));
+const h = grid.length;
+const paths = new Map<string, string>();
+grid.forEach((row, y) => {
+  let x = 0;
+  while (x < row.length) {
+    const ch = row[x];
+    let run = 1;
+    while (row[x + run] === ch) run++;
+    if (PALETTE[ch]) paths.set(PALETTE[ch], `${paths.get(PALETTE[ch]) ?? ''}M${x} ${y}h${run}v1h-${run}z`);
+    x += run;
+  }
+});
+---
+
+<svg class:list={['pxi', cls]} viewBox={`0 0 ${w} ${h}`} width={w * scale} height={h * scale} aria-hidden="true" shape-rendering="crispEdges">
+  {[...paths].map(([fill, d]) => <path fill={fill} d={d} />)}
+</svg>

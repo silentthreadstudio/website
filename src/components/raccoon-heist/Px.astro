@@ -1,0 +1,62 @@
+---
+// One frame of a horizontal sprite sheet at the scene's integer scale (--px, inherited).
+// A real <img> with its size set, so it lazy-loads and never shifts the layout.
+// loop: cycles frames from..to with CSS steps(); scripts can change --f / --a / --k / --dur.
+// Reduced motion always shows the still frame --f.
+import { SHEETS, type SheetId } from './data';
+
+interface Props {
+  sheet: SheetId;
+  frame?: number;
+  loop?: [number, number];
+  fps?: number;
+  flip?: boolean;
+  eager?: boolean;
+  alt?: string;
+  class?: string;
+  [key: `data-${string}`]: string | undefined;
+}
+
+const { sheet, frame = 0, loop, fps, flip = false, eager = false, alt = '', class: cls, ...rest } = Astro.props;
+const s = SHEETS[sheet];
+const [a, b] = loop ?? [frame, frame];
+const k = b - a + 1;
+const style = [
+  `--w:${s.cell[0]}`, `--h:${s.cell[1]}`, `--n:${s.frames}`, `--f:${frame}`, `--a:${a}`, `--k:${k}`,
+  `--dur:${(k / (fps ?? s.fps)).toFixed(3)}s`,
+].join(';');
+---
+
+<span class:list={['px', { 'px-loop': !!loop, 'px-flip': flip }, cls]} style={style} data-px={sheet} {...rest}>
+  {eager ? (
+    <img src={s.src} width={s.cell[0] * s.frames} height={s.cell[1]} alt={alt} decoding="async" draggable="false" />
+  ) : (
+    <>
+      {/* Below the fold: the page script sets src after the hero has loaded; <noscript> keeps the no-JS page whole. */}
+      <img data-src={s.src} width={s.cell[0] * s.frames} height={s.cell[1]} alt={alt} decoding="async" draggable="false" />
+      <noscript><img src={s.src} width={s.cell[0] * s.frames} height={s.cell[1]} alt={alt} /></noscript>
+    </>
+  )}
+</span>
+
+<style>
+  .px {
+    --s: var(--px, 1);
+    position: relative; display: inline-block; flex: none; overflow: hidden; vertical-align: bottom;
+    width: calc(var(--w) * var(--s) * 1px); height: calc(var(--h) * var(--s) * 1px);
+  }
+  .px img {
+    display: block; max-width: none;
+    width: calc(var(--w) * var(--n) * var(--s) * 1px); height: calc(var(--h) * var(--s) * 1px);
+    image-rendering: pixelated; user-select: none; pointer-events: none;
+    transform: translateX(calc(var(--w) * var(--s) * var(--f) * -1px));
+  }
+  .px-flip { transform: scaleX(-1); }
+  @media (prefers-reduced-motion: no-preference) {
+    .px-loop img { animation: px-loop var(--dur) steps(var(--k)) infinite; }
+  }
+  @keyframes px-loop {
+    from { transform: translateX(calc(var(--w) * var(--s) * var(--a) * -1px)); }
+    to { transform: translateX(calc(var(--w) * var(--s) * (var(--a) + var(--k)) * -1px)); }
+  }
+</style>

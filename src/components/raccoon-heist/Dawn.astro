@@ -1,0 +1,81 @@
+---
+// Dawn. The night is paid; the Boss signs off. The palette warms to the game's gold, and the page asks
+// for the one thing it can: follow along until the doors open.
+import Px from './Px.astro';
+import { STATUS } from './data';
+---
+
+<section id="dawn" class="rh-sec dawn" aria-labelledby="dawn-title">
+  <span class="sun" aria-hidden="true"></span>
+  <div class="rh-wrap dawn-grid">
+    <figure class="signoff">
+      <span class="signoff-bust" aria-hidden="true"><Px sheet="vermino_bust" frame={4} data-bust="dawn" /></span>
+      <blockquote class="signoff-line">
+        <p>Pleasure doing business. Same time tomorrow.</p>
+      </blockquote>
+      <figcaption class="signoff-who">Don Vermino, 6:00 AM</figcaption>
+    </figure>
+
+    <div class="dawn-copy">
+      <p class="rh-kicker dawn-kicker">6 AM, doors close</p>
+      <h2 id="dawn-title" class="dawn-title">Hear when the doors open</h2>
+      <p class="dawn-text">Raccoon Heist is coming to Steam. {STATUS}</p>
+      <div class="dawn-ctas">
+        <a class="btn dawn-btn" href="https://x.com/silentthreadhq" rel="me noopener">Follow @silentthreadhq</a>
+        <a class="link-pixel dawn-link" href="/devlog">Read the devlog <span aria-hidden="true">&rarr;</span></a>
+        <a class="link-pixel dawn-link" href="/">Back to the studio</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Sunrise built from the palette: slate violet -> crimson -> gold -> pale gold. */
+  .dawn {
+    overflow: hidden; color: var(--ink);
+    background: linear-gradient(to bottom, #3d2a4f 0%, var(--crim-d) 14%, var(--crim) 30%, var(--gold-d) 52%, var(--gold) 74%, var(--gold-l) 100%);
+    padding-bottom: clamp(100px, 16vh, 180px);
+  }
+  .sun {
+    position: absolute; left: 50%; bottom: -220px; width: 520px; height: 520px; transform: translateX(-50%);
+    background:
+      radial-gradient(circle, var(--gold-l) 0 46%, transparent 46.5%),
+      radial-gradient(circle, rgb(255 233 160 / 0.5) 0 54%, transparent 54.5%),
+      radial-gradient(circle, rgb(255 233 160 / 0.25) 0 62%, transparent 62.5%);
+    pointer-events: none;
+  }
+  .dawn-grid {
+    --px: 1;
+    position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(28px, 6vw, 90px); align-items: center;
+  }
+  @media (min-width: 1000px) { .dawn-grid { --px: 2; } }
+
+  .signoff { margin: 0; display: grid; justify-items: center; gap: 0; }
+  .signoff-bust { line-height: 0; border: 2px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); background: linear-gradient(to bottom, #3d2a4f, var(--crim-d)); padding: 16px 20px 0; }
+  .signoff-line {
+    margin: -14px 0 0; position: relative; z-index: 1; max-width: 18em;
+    background: var(--text); border: 2px solid var(--ink); box-shadow: 5px 5px 0 var(--ink); padding: 12px 16px;
+  }
+  .signoff-line p { margin: 0; font: 700 clamp(0.95rem, 1.4vw, 1.15rem)/1.35 var(--pixel); color: var(--ink); text-align: center; }
+  .signoff-who { margin-top: 14px; font: 700 0.75rem var(--pixel); text-transform: uppercase; color: var(--ink); }
+
+  .dawn-copy { display: grid; gap: 18px; justify-items: start; }
+  .dawn-kicker { color: var(--ink); background: var(--gold-l); padding: 6px 8px; border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); }
+  .dawn-title {
+    margin: 0; font: 700 clamp(2rem, 5.4vw, 4.6rem)/1 var(--pixel); text-transform: uppercase; text-wrap: balance;
+    color: var(--ink); text-shadow: 3px 3px 0 var(--gold-l);
+  }
+  .dawn-text {
+    margin: 0; max-width: 42ch; font-size: clamp(1.05rem, 1.5vw, 1.25rem); line-height: 1.5; font-weight: 600;
+    color: var(--ink); background: rgb(255 233 160 / 0.9); padding: 10px 14px; border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--ink);
+  }
+  .dawn-ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 6px; }
+  .dawn-btn { background: var(--night); color: var(--gold-l); box-shadow: inset 2px 2px 0 var(--slate-hi), 5px 5px 0 var(--ink); }
+  .dawn-btn:hover { background: var(--ink); color: var(--gold); box-shadow: inset 2px 2px 0 var(--slate-hi), 6px 6px 0 var(--ink); }
+  .dawn-link { color: var(--ink); }
+  .dawn-link:hover { color: var(--crim-d); }
+
+  @media (max-width: 760px) {
+    .dawn-grid { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

@@ -1,0 +1,305 @@
+---
+// The loop as one night in one casino. A HUD styled like the game's (coins, protection bar, time to dawn)
+// rides along and fills as you scroll: Fight -> Grab the coins -> Pay by dawn.
+// Every scene is a stage measured in art pixels (U = --px screen px). All geometry comes from the sheets'
+// cell sizes (data.ts) passed in as CSS vars, so swapping a sprite keeps the anchors.
+// Each moving piece is driven by one var (--t, --ko, --hit, ...). CSS defaults are the composed frame;
+// the script scrubs them with the scroll.
+import Px from './Px.astro';
+import PixelIcon from './PixelIcon.astro';
+import { SHEETS, ICONS } from './data';
+
+const cell = (id: keyof typeof SHEETS) => SHEETS[id].cell;
+const [rfw, rfh] = cell('rocco_fight');
+const [tw, th] = cell('rat_thug');
+const [rcw, rch] = cell('rocco_coins');
+const [rpw, rph] = cell('rocco_payup');
+const [vw, vh] = cell('vermino');
+
+// Fight: three cards from Rocco's hand to the thug, coins spill when he drops.
+const CARDS = [
+  { frame: 0, t: 0.62, arc: 30, spin: 400 },
+  { frame: 1, t: 0.86, arc: 60, spin: 560 },
+  { frame: 2, t: 0.3, arc: 10, spin: 300 },
+];
+const SPILL = [[-170, 10], [-120, 26], [-70, 4], [-20, 30], [40, 14], [90, 2]]; // where the spilled coins land: [dx, dy] in art px from the thug's pocket
+// Grab: coins fall from across the room into the sack. fx = start x as a share of the stage.
+const RAIN = Array.from({ length: 16 }, (_, i) => ({ fx: ((i * 0.618) % 1) * 0.9 + 0.05, t: ((i * 0.37) % 1) * 0.8 + 0.1 }));
+---
+
+<section id="night" class="rh-sec night" aria-labelledby="night-title">
+  <div class="rh-wrap rh-head night-head">
+    <p class="rh-kicker">Midnight</p>
+    <h2 id="night-title" class="rh-h2">One night, start to dawn</h2>
+    <p class="rh-lede">Every night the Rat Mob sends its boys to wreck the place. Every dawn the Boss comes for his envelope.</p>
+  </div>
+
+  <div class="track" data-night>
+    <div class="hud-dock">
+      <div class="hud" data-hud>
+        <p class="visually-hidden">The game's HUD: the protection money fills as Rocco earns gold, and the clock runs down to dawn.</p>
+        <div class="hud-coins hud-box" aria-hidden="true">
+          <PixelIcon grid={ICONS.coin} scale={3} />
+          <span class="hud-num" data-hud-coins>500</span>
+        </div>
+        <div class="hud-prot hud-box" aria-hidden="true">
+          <span class="hud-label"><span class="hud-word">Protection</span> <span data-hud-prot>500</span>/500</span>
+          <span class="hud-bar"><span class="hud-fill" data-hud-fill></span></span>
+        </div>
+        <div class="hud-time hud-box" aria-hidden="true">
+          <span class="hud-moon"><PixelIcon grid={ICONS.moon} scale={3} /></span>
+          <span class="hud-sun"><PixelIcon grid={ICONS.sun} scale={3} /></span>
+          <span class="hud-num" data-hud-time>Dawn</span>
+        </div>
+      </div>
+    </div>
+
+    <ol class="beats">
+      <!-- 01 Fight -->
+      <li class="beat" data-beat="fight">
+        <div class="scene scene-fight" style={`--rw:${rfw};--rh:${rfh};--tw:${tw};--th:${th}`}>
+          <div class="stage" aria-hidden="true">
+            <Px sheet="rocco_fight" class="who who-rocco" />
+            <span class="thug" data-thug><Px sheet="rat_thug" flip /></span>
+            {CARDS.map((c) => (
+              <span class="fly card" style={`--t:${c.t};--arc:${c.arc};--spin:${c.spin}`} data-card>
+                <Px sheet="cards" frame={c.frame} />
+              </span>
+            ))}
+            {SPILL.map(([dx, dy]) => (
+              <span class="fly spill" style={`--dx:${dx};--dy:${dy};--t:1`} data-spill><Px sheet="coin" loop={[0, 5]} /></span>
+            ))}
+            <span class="pop pop-crit" data-pop="crit">Crit! -20</span>
+            <span class="pop pop-hit" data-pop="hit">-10</span>
+            <span class="pop pop-ko" data-pop="ko">Oof</span>
+          </div>
+        </div>
+        <div class="caption panel">
+          <p class="cap-n">01</p>
+          <h3 class="cap-title">Fight</h3>
+          <p class="cap-text">Rocco fights with a deck of cards, and aces always hit hard. The Boss pays his goons in advance, so knock one out and his pockets spill.</p>
+        </div>
+      </li>
+
+      <!-- 02 Grab the coins -->
+      <li class="beat" data-beat="grab">
+        <div class="scene scene-grab" style={`--rw:${rcw};--rh:${rch}`}>
+          <div class="stage" aria-hidden="true">
+            <Px sheet="rocco_coins" class="who who-rocco" />
+            {RAIN.map((c) => (
+              <span class="fly rain" style={`--fx:${c.fx};--t:${c.t}`} data-rain><Px sheet="coin" loop={[0, 5]} /></span>
+            ))}
+            <span class="pop pop-gold" data-pop="gold">+10</span>
+          </div>
+        </div>
+        <div class="caption panel">
+          <p class="cap-n">02</p>
+          <h3 class="cap-title">Grab the coins</h3>
+          <p class="cap-text">Every coin goes in the sack, and the sack is what the Boss collects. Spend it on tricks and machines instead, and you'd better win it back.</p>
+        </div>
+      </li>
+
+      <!-- 03 Pay by dawn -->
+      <li class="beat" data-beat="pay">
+        <div class="scene scene-pay" style={`--rw:${rpw};--rh:${rph};--vw:${vw};--vh:${vh}`}>
+          <span class="dawn-light" data-dawn aria-hidden="true"></span>
+          <div class="stage" aria-hidden="true">
+            <Px sheet="rocco_payup" class="who who-rocco" />
+            <span class="boss-full" data-boss-full><Px sheet="vermino" frame={1} /></span>
+            <span class="bubble" data-bubble>Exact change. I could almost like you.</span>
+            <span class="stamp" data-stamp>Paid</span>
+          </div>
+        </div>
+        <div class="caption panel">
+          <p class="cap-n">03</p>
+          <h3 class="cap-title">Pay by dawn</h3>
+          <p class="cap-text">At dawn the Boss collects. Paid: the casino is yours for one more night, and tomorrow he wants more. Short: the deed goes back to him.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<style>
+  .night {
+    padding-bottom: clamp(60px, 10vh, 120px);
+    background: linear-gradient(to bottom, var(--night), var(--ink) 30%, var(--ink) 80%, #2a1a2e);
+  }
+  .night-head { margin-bottom: 2rem; }
+
+  .track { --px: 1; position: relative; max-width: 1376px; margin-inline: auto; }
+  @media (min-width: 1200px) and (min-height: 760px) { .track { --px: 2; } }
+
+  /* ---------- HUD (the game's counter and progress bar: night fill, ink outline, bevel) ---------- */
+  .hud-dock { position: sticky; top: calc(var(--header-h) + 12px); z-index: 20; height: 0; }
+  /* A band behind the HUD, full width: whatever scrolls up dips under it like under a game's HUD bar. */
+  .hud-dock::before {
+    content: ''; position: absolute; top: -12px; left: 50%; width: 100vw; height: 96px; transform: translateX(-50%);
+    background: linear-gradient(to bottom, var(--ink) 0, rgb(20 16 31 / 0.92) 62%, rgb(20 16 31 / 0));
+    pointer-events: none;
+  }
+  .hud { position: relative; }
+  .hud {
+    display: flex; justify-content: center; align-items: stretch; gap: 10px;
+    font: 700 1rem/1 var(--pixel); color: var(--text); text-transform: uppercase;
+  }
+  .hud-box {
+    display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+    background: var(--night); border: 2px solid var(--line-g);
+    box-shadow: inset 2px 2px 0 var(--slate-hi), 4px 4px 0 #0a0812;
+  }
+  .hud-num { font-variant-numeric: tabular-nums; min-width: 3ch; }
+  .hud-coins .hud-num { color: var(--gold-l); }
+  .hud-prot { flex-direction: column; align-items: stretch; gap: 6px; padding: 8px 14px; min-width: min(380px, 46vw); }
+  .hud-label { display: block; text-align: center; letter-spacing: 0.02em; white-space: nowrap; }
+  .hud-bar { display: block; height: 14px; background: var(--ink); border: 2px solid var(--ink); box-shadow: inset 0 0 0 2px var(--slate); position: relative; }
+  .hud-fill {
+    --fill: 1;
+    position: absolute; inset: 2px auto 2px 2px; width: calc((100% - 4px) * var(--fill));
+    background: linear-gradient(to bottom, var(--gold-l) 0 2px, var(--gold) 2px 100%);
+  }
+  .hud-time .hud-sun { display: none; }
+  .hud[data-dawn='true'] .hud-moon { display: none; }
+  .hud[data-dawn='true'] .hud-sun { display: block; }
+  .hud-moon, .hud-sun { line-height: 0; }
+  /* Paid: the bar flashes, the board turns gold. */
+  .hud[data-paid='true'] .hud-prot { background: var(--gold); color: var(--ink); border-color: var(--gold-l); box-shadow: inset 2px 2px 0 var(--gold-l), 4px 4px 0 #0a0812; }
+  .hud[data-paid='true'] .hud-fill { background: var(--neon); }
+  @media (prefers-reduced-motion: no-preference) {
+    .hud[data-paid='true'] .hud-fill { animation: paid 0.5s steps(2) 3; }
+  }
+  @keyframes paid { 50% { background: var(--gold-l); } }
+
+  /* ---------- Beats ---------- */
+  .beats { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(90px, 16vh, 180px); padding-top: 84px; }
+  .beat { position: relative; }
+
+  .scene {
+    --U: calc(var(--px) * 1px);
+    position: relative; overflow: hidden;
+    --floor: 16;
+    height: calc((var(--sh) + 64) * var(--U));
+    border: 2px solid var(--ink); box-shadow: 8px 8px 0 var(--ink);
+    /* The same casino all night: the teaser room at the scene's scale, floor at the bottom. */
+    background: url('/raccoon-heist/background.webp') 50% 100% / calc(688 * var(--U)) calc(384 * var(--U)) no-repeat, #07040F;
+    image-rendering: pixelated;
+  }
+  .scene::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(to bottom, rgb(20 16 31 / 0.75), rgb(20 16 31 / 0.25) 45%, rgb(20 16 31 / 0.1));
+  }
+  .stage {
+    position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+    width: calc(var(--sw) * var(--U)); height: calc(var(--sh) * var(--U));
+  }
+  .who { position: absolute; left: 0; bottom: calc(var(--floor) * var(--U)); }
+
+  /* Anything that travels: a point from (x0, y0) to (x1, y1), y up from the floor, with an arc. */
+  .fly {
+    --t: 0; --arc: 0; --spin: 0;
+    position: absolute; left: 0; bottom: 0; line-height: 0; z-index: 3;
+    transform:
+      translate(
+        calc((var(--x0) + (var(--x1) - var(--x0)) * var(--t)) * var(--U) - 50%),
+        calc((var(--y0) + (var(--y1) - var(--y0)) * var(--t) + var(--arc) * 4 * var(--t) * (1 - var(--t))) * var(--U) * -1 + 50%)
+      )
+      rotate(calc(var(--t) * var(--spin) * 1deg));
+    opacity: calc(min(1, var(--t) * 14) * min(1, (1 - var(--t)) * 14));
+  }
+
+  /* Pop-up text like the game's damage numbers. */
+  .pop {
+    --t: 0;
+    position: absolute; left: 0; bottom: 0; z-index: 4; white-space: nowrap;
+    font: 700 calc(14px + 6px * var(--px))/1 var(--pixel); text-transform: uppercase;
+    color: var(--gold); text-shadow: 2px 2px 0 var(--ink), -2px -2px 0 var(--ink), 2px -2px 0 var(--ink), -2px 2px 0 var(--ink);
+    transform: translate(calc(var(--px0) * var(--U) - 50%), calc((var(--py0) + var(--t) * 26) * var(--U) * -1));
+    opacity: var(--o, 0);
+  }
+
+  /* Fight: Rocco left, the thug a fight's distance away. */
+  .scene-fight { --gap: 140; --sw: calc(var(--rw) + var(--gap) + var(--tw)); --sh: calc(max(var(--rh), var(--th)) + 30); }
+  .thug {
+    --ko: 0; --hit: 0;
+    position: absolute; bottom: calc(var(--floor) * var(--U)); left: calc((var(--rw) + var(--gap)) * var(--U)); line-height: 0;
+    transform-origin: 60% 100%;
+    transform: translate(calc(var(--ko) * 34 * var(--U)), calc(var(--ko) * 10 * var(--U))) rotate(calc(var(--ko) * 14deg));
+    filter: brightness(calc(1 + var(--hit) * 2.4 - var(--ko) * 0.3));
+  }
+  .card { --x0: calc(var(--rw) * 0.86); --y0: calc(var(--floor) + var(--rh) * 0.72); --x1: calc(var(--rw) + var(--gap) + var(--tw) * 0.32); --y1: calc(var(--floor) + var(--th) * 0.62); }
+  .spill {
+    --x0: calc(var(--rw) + var(--gap) + var(--tw) * 0.5); --y0: calc(var(--floor) + var(--th) * 0.45);
+    --x1: calc(var(--x0) + var(--dx)); --y1: calc(var(--floor) + var(--dy)); --arc: 90;
+    /* Spilled coins stay on the floor once they land. */
+    opacity: min(1, calc(var(--t) * 14));
+  }
+  .pop-crit, .pop-hit, .pop-ko { --px0: calc(var(--rw) + var(--gap) + var(--tw) * 0.45); --py0: calc(var(--floor) + var(--th) + 6); }
+  .pop-crit { --o: 1; --t: 0.3; color: var(--neon); }
+  .pop-hit { --px0: calc(var(--rw) + var(--gap) + var(--tw) * 0.55); --py0: calc(var(--floor) + var(--th) * 0.78); }
+  .pop-ko { color: var(--text); }
+
+  /* Grab: coins rain across the room and into the sack. */
+  .scene-grab { --side: 200; --sw: calc(var(--rw) + var(--side) * 2); --sh: calc(var(--rh) + 30); }
+  .scene-grab .who-rocco { left: calc(var(--side) * var(--U)); }
+  .rain { --x0: calc(var(--sw) * var(--fx)); --y0: calc(var(--rh) + 120); --x1: calc(var(--side) + var(--rw) * 0.2); --y1: calc(var(--floor) + var(--rh) * 0.4); --arc: 20; --spin: 0; }
+  .pop-gold { --px0: calc(var(--side) + var(--rw) * 0.2); --py0: calc(var(--floor) + var(--rh) * 0.62); --o: 1; --t: 0.4; }
+
+  /* Pay: Rocco hands over the sack; the Boss tips his hat; first light. */
+  .scene-pay { --gap: 70; --sw: calc(var(--rw) + var(--gap) + var(--vw)); --sh: calc(max(var(--rh), var(--vh)) + 30); }
+  .boss-full { position: absolute; bottom: calc(var(--floor) * var(--U)); left: calc((var(--rw) + var(--gap)) * var(--U)); line-height: 0; }
+  .dawn-light {
+    --dawn: 1;
+    position: absolute; inset: 0; pointer-events: none; opacity: var(--dawn);
+    background:
+      radial-gradient(80% 90% at 50% 0%, rgb(255 201 60 / 0.5), transparent 70%),
+      linear-gradient(to bottom, rgb(255 154 138 / 0.34), rgb(199 134 30 / 0.2) 55%, rgb(155 35 53 / 0.12));
+    mix-blend-mode: screen;
+  }
+  .bubble {
+    --o: 1;
+    position: absolute; z-index: 4; opacity: var(--o);
+    left: calc((var(--rw) + var(--gap) + var(--vw) * 0.5) * var(--U)); bottom: calc((var(--floor) + var(--vh) + 18) * var(--U));
+    transform: translateX(-50%); width: max-content; max-width: min(28ch, 80vw);
+    font: 700 calc(11px + 3px * var(--px))/1.35 var(--pixel); color: var(--ink); text-align: center;
+    background: var(--text); padding: 10px 14px; border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--ink);
+  }
+  .bubble::after {
+    content: ''; position: absolute; left: 50%; bottom: -12px; width: 14px; height: 12px; transform: translateX(-50%);
+    background: var(--text); clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+  .stamp {
+    --o: 1; --sc: 1;
+    position: absolute; z-index: 5; left: calc((var(--rw) + var(--gap) * 0.5) * var(--U)); bottom: calc((var(--floor) + var(--rh) * 0.84) * var(--U));
+    transform: translate(-50%, 50%) rotate(-10deg) scale(var(--sc)); opacity: var(--o);
+    font: 700 calc(28px + 14px * var(--px))/1 var(--pixel); text-transform: uppercase; color: var(--crim);
+    padding: 6px 14px; border: 4px solid var(--crim); background: rgb(244 238 220 / 0.92);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  /* ---------- Caption: the game's dialogue panel, overlapping the scene's bottom edge ---------- */
+  .caption {
+    position: relative; z-index: 2; margin: -48px 0 0 clamp(12px, 3vw, 40px); max-width: 34rem;
+    padding: 18px 22px 20px; display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: baseline;
+  }
+  .cap-n { margin: 0; font: 700 0.9rem var(--pixel); color: var(--gold-d); }
+  .cap-title { margin: 0; font: 700 clamp(1.3rem, 2.2vw, 1.8rem)/1.1 var(--pixel); text-transform: uppercase; color: var(--gold); }
+  .cap-text { grid-column: 1 / -1; margin: 0; color: var(--text); font-size: 1.02rem; line-height: 1.5; }
+
+  /* ---------- Phones: tighter stages, HUD in one compact row ---------- */
+  @media (max-width: 700px) {
+    .scene-fight { --gap: -60; }
+    .scene-fight .stage { transform: translateX(calc(-50% - 16px)); }
+    .scene-grab { --side: 80; }
+    .scene-pay { --gap: -40; }
+    .bubble { left: calc(var(--sw) * 0.5 * var(--U)); bottom: auto; top: -54px; max-width: 24ch; }
+    .bubble::after { display: none; }
+    .stamp { bottom: calc((var(--floor) + var(--rh) * 0.6) * var(--U)); font-size: 30px; padding: 4px 10px; border-width: 3px; }
+    .hud { gap: 6px; font-size: 0.78rem; }
+    .hud-dock::before { height: 78px; }
+    .hud-box { padding: 6px 8px; gap: 6px; }
+    .hud-prot { min-width: 0; flex: 1; padding: 6px 8px; }
+    .hud-word { display: none; }
+    .hud :global(.pxi) { width: 18px; height: 18px; }
+    .caption { margin: -28px 10px 0; }
+  }
+</style>

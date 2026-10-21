@@ -1,0 +1,60 @@
+---
+// Raccoon Heist: the game's own loud world inside the studio frame. The scroll is one night at
+// Don Vermino's casino: dusk at the top, the night in the middle, dawn (pay up) at the end.
+import '@fontsource/silkscreen/400.css';
+import '@fontsource/silkscreen/700.css';
+import '../../styles/raccoon-heist.css';
+import silkscreenBold from '@fontsource/silkscreen/files/silkscreen-latin-700-normal.woff2?url';
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/raccoon-heist/Hero.astro';
+import Catch from '../../components/raccoon-heist/Catch.astro';
+import Night from '../../components/raccoon-heist/Night.astro';
+import BetItAll from '../../components/raccoon-heist/BetItAll.astro';
+import Cast from '../../components/raccoon-heist/Cast.astro';
+import Grow from '../../components/raccoon-heist/Grow.astro';
+import Dawn from '../../components/raccoon-heist/Dawn.astro';
+import { LOGLINE } from '../../components/raccoon-heist/data';
+import { videoGame, breadcrumb } from '../../lib/schema';
+
+const description = `${LOGLINE} Defend the casino every night and pay the Rat Boss by dawn. A heist roguelite from Silent Thread, coming to Steam.`;
+const ogImage = '/og-raccoon-heist.png';
+---
+
+<Base
+  theme="heist"
+  preloadFonts={false}
+  title="Raccoon Heist | Silent Thread"
+  description={description}
+  ogImage={ogImage}
+  ogImageAlt="Raccoon Heist concept art: Rocco the raccoon holds up a card and a coin sack under a casino marquee, flanked by the Rat Mob."
+  schema={[videoGame(description, ogImage), breadcrumb([{ name: 'Raccoon Heist', path: '/games/raccoon-heist' }])]}
+>
+  <Fragment slot="head">
+    <link rel="preload" href={silkscreenBold} as="font" type="font/woff2" crossorigin />
+    <meta name="theme-color" content="#14101F" />
+    <script is:inline>
+      // .js: interactive defaults. .js-motion + .rh-intro: the dark room before the opening runs.
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          d.classList.add('js-motion', 'rh-intro');
+          setTimeout(function () { d.classList.remove('rh-intro'); }, 4000);
+        }
+      })();
+    </script>
+  </Fragment>
+
+  <Hero />
+  <Catch />
+  <Night />
+  <BetItAll />
+  <Cast />
+  <Grow />
+  <Dawn />
+</Base>
+
+<script>
+  import { initRaccoonHeist } from '../../scripts/raccoon-heist';
+  initRaccoonHeist();
+</script>

@@ -1,0 +1,91 @@
+---
+// The cast: one line-up on one floor under the house lights, every figure at the SAME integer scale.
+// Hovering a character lifts them a step and turns their spotlight up. No pedestals.
+import Px from './Px.astro';
+import { CAST, SHEETS } from './data';
+
+// The tallest figure sets the floor line, so a resized sprite never breaks the line-up.
+const maxH = Math.max(...CAST.map((c) => SHEETS[c.sheet].cell[1]));
+---
+
+<section id="cast" class="rh-sec cast" aria-labelledby="cast-title">
+  <div class="cast-head"><div class="rh-wrap">
+    <div class="rh-head">
+      <p class="rh-kicker">4 AM, everybody's here</p>
+      <h2 id="cast-title" class="rh-h2">The usual suspects</h2>
+    </div>
+  </div></div>
+
+  <div class="lineup-scroll" tabindex="0" role="region" aria-label="The cast line-up, scrolls sideways on small screens">
+    <ul class="lineup" style={`--mh:${maxH}`}>
+      {CAST.map((c) => (
+        <li class:list={['member', { boss: c.boss }]} style={`--cw:${SHEETS[c.sheet].cell[0]}`}>
+          <span class="spot" aria-hidden="true"></span>
+          <span class="figure"><Px sheet={c.sheet} frame={c.frame ?? 0} /></span>
+          <p class="plate">{c.name}{c.tag && <span class="plate-tag"> {c.tag}</span>}</p>
+          <p class="quip">{c.line}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <p class="swipe" aria-hidden="true">Swipe the line-up &rarr;</p>
+</section>
+
+<style>
+  .cast { background: var(--night); padding-inline: 0; overflow: hidden; }
+  .cast-head { padding: 0 var(--side-r) 0 var(--side-l); }
+
+  .lineup-scroll { overflow-x: auto; scrollbar-width: thin; scrollbar-color: var(--slate-hi) transparent; }
+  .lineup-scroll:focus-visible { outline-offset: -3px; }
+  .lineup {
+    --px: 1;
+    position: relative; list-style: none; margin: 0 auto; padding: 60px var(--side-r) 8px var(--side-l);
+    display: flex; justify-content: center; align-items: stretch; gap: clamp(4px, 1.2vw, 18px);
+    min-width: max-content;
+  }
+  /* The shared floor: one red carpet under everyone, edge to edge. */
+  .lineup::before {
+    content: ''; position: absolute; left: 0; right: 0; top: calc(60px + var(--mh) * var(--px) * 1px + 6px); height: 26px;
+    background: repeating-linear-gradient(90deg, var(--crim-d) 0 24px, #861d2d 24px 26px);
+    border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); box-shadow: 0 6px 0 var(--ink);
+  }
+  .member {
+    position: relative; display: grid; grid-template-rows: calc(var(--mh) * var(--px) * 1px + 20px) auto auto; justify-items: center; gap: 12px;
+    width: max(calc(var(--cw) * var(--px) * 1px), 170px);
+  }
+  .figure {
+    position: relative; z-index: 1; align-self: end; line-height: 0; margin-bottom: 10px;
+    transition: transform 160ms steps(3), filter 160ms steps(3);
+    filter: brightness(0.82) saturate(0.9);
+  }
+  /* A cone of light from above, per character. */
+  .spot {
+    position: absolute; top: -60px; left: 50%; width: 150%; height: calc(var(--mh) * var(--px) * 1px + 92px); transform: translateX(-50%);
+    background:
+      radial-gradient(50% 12% at 50% 100%, rgb(255 233 160 / 0.28), transparent 100%),
+      linear-gradient(to bottom, rgb(255 233 160 / 0.14), rgb(255 233 160 / 0.04));
+    clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%);
+    opacity: 0.55; transition: opacity 160ms steps(3); pointer-events: none;
+  }
+  .member:hover .figure { transform: translateY(-8px); filter: none; }
+  .member:hover .spot { opacity: 1; }
+  .boss .spot { background: radial-gradient(50% 12% at 50% 100%, rgb(229 72 77 / 0.3), transparent 100%), linear-gradient(to bottom, rgb(255 154 138 / 0.16), rgb(255 154 138 / 0.04)); }
+
+  .plate {
+    margin: 0; position: relative; z-index: 2; white-space: nowrap; text-align: center;
+    font: 700 0.8rem/1 var(--pixel); text-transform: uppercase; color: var(--ink);
+    background: var(--gold); padding: 9px 12px; border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink);
+  }
+  .plate-tag { color: var(--crim-d); }
+  .boss .plate { background: var(--crim-d); color: var(--text); }
+  .quip { margin: 0; max-width: 22ch; text-align: center; color: var(--text-dim); font-size: 0.95rem; line-height: 1.4; }
+
+  .swipe { display: none; margin: 14px var(--side-r) 0 var(--side-l); font: 400 0.75rem var(--pixel); text-transform: uppercase; color: var(--text-dim); }
+  @media (max-width: 1240px) {
+    .lineup-scroll { scroll-snap-type: x mandatory; scroll-padding-inline: var(--side-l); }
+    .member { scroll-snap-align: start; }
+    .lineup { justify-content: flex-start; }
+    .swipe { display: block; }
+  }
+  @media (prefers-reduced-motion: reduce) { .figure, .spot { transition: none; } }
+</style>

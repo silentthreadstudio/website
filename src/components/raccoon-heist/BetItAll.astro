@@ -1,0 +1,274 @@
+---
+// Bet it all (in development): the casino floor you can touch. Slot machine you can pull,
+// a lockbox that opens when you stand close (hover) or tap, powers and charms, and the Boss's Deal.
+// Every control is a real <button>; results are announced politely. Rarity borders follow the game's UI.
+import Px from './Px.astro';
+import PixelIcon from './PixelIcon.astro';
+import { POWERS, CHARMS, DEALS, SLOT, SYMBOLS, REELS, ICONS } from './data';
+
+const START_REELS = ['cherry', 'seven', 'bell'] as const;
+---
+
+<section id="bet" class="rh-sec bet" aria-labelledby="bet-title">
+  <div class="rh-wrap">
+    <div class="rh-head">
+      <p class="rh-kicker">3 AM, the floor gets loud</p>
+      <div class="rh-head-row">
+        <h2 id="bet-title" class="rh-h2">Bet it all</h2>
+        <span class="chip chip-teal">In development</span>
+      </div>
+      <p class="rh-lede">Every click is a bet. Gold spent on tricks and machines is gold the Boss doesn't get, so it had better pay.</p>
+    </div>
+
+    <div class="floor">
+      <!-- Slot machine -->
+      <article class="slot panel" aria-labelledby="slot-title" data-slot>
+        <div class="slot-art">
+          <span class="slot-glow" aria-hidden="true"></span>
+          <Px sheet="slot_machine" loop={[0, 1]} fps={3} class="slot-px" data-slot-px />
+          <span class="burst" data-burst aria-hidden="true"></span>
+        </div>
+        <div class="slot-ui">
+          <h3 id="slot-title" class="item-title">Slot machine</h3>
+          <p class="item-text">The Mob rigged these years ago. Rocco knows how to make them pay him instead.</p>
+          <div class="reels" aria-hidden="true">
+            {START_REELS.map((r, i) => (
+              <span class="reel" data-reel={i}>
+                {REELS.map((sym) => (
+                  <span class="sym" data-sym={sym} hidden={sym !== r}><PixelIcon grid={SYMBOLS[sym]} scale={4} /></span>
+                ))}
+              </span>
+            ))}
+          </div>
+          <p class="slot-result" data-slot-result role="status" aria-live="polite">Pull the lever. Sometimes the house pays you.</p>
+          <div class="slot-row">
+            <button class="btn pull" type="button" data-pull>Pull <span class="pull-cost">{SLOT.cost}</span></button>
+            <p class="sack"><PixelIcon grid={ICONS.coin} scale={3} /><span class="visually-hidden">Gold in the sack:</span> <span data-sack>{SLOT.start}</span></p>
+          </div>
+          <button class="btn btn-ghost loan" type="button" data-loan hidden>Take the Boss's Loan</button>
+        </div>
+      </article>
+
+      <!-- Lockbox -->
+      <article class="box panel" aria-labelledby="box-title">
+        <button class="box-btn" type="button" data-lockbox aria-describedby="box-text">
+          <Px sheet="lockbox" class="box-px" data-lockbox-px />
+          <span class="burst" data-burst aria-hidden="true"></span>
+          <span class="box-cta" data-box-cta>Open it</span>
+        </button>
+        <h3 id="box-title" class="item-title">Lockboxes</h3>
+        <p id="box-text" class="item-text">Stand close and it opens. No click needed.</p>
+        <p class="box-result" data-box-result role="status" aria-live="polite"></p>
+      </article>
+
+      <!-- Powers -->
+      <article class="powers panel" aria-labelledby="powers-title">
+        <h3 id="powers-title" class="item-title">Powers</h3>
+        <p class="item-text">Three keys. They cost gold, so pick your moment.</p>
+        <ul class="hotbar">
+          {POWERS.map((p, i) => (
+            <li class="power">
+              <span class={`slot-frame r-${p.rarity}`}><Px sheet="power_icons" frame={i} /></span>
+              <span class="key" aria-hidden="true">[{p.key}]</span>
+              <span class="power-name">{p.name}</span>
+              <span class="power-line">{p.line}</span>
+            </li>
+          ))}
+        </ul>
+      </article>
+
+      <!-- The Boss's Deal -->
+      <article class="deal panel" aria-labelledby="deal-title">
+        <div class="deal-head">
+          <h3 id="deal-title" class="item-title">The Boss's Deal</h3>
+          <p class="item-text">Pay on time and the Boss invests in his investment. His best cards come with a catch. Turn them over.</p>
+        </div>
+        <ul class="deals" data-deals>
+          {DEALS.map((d, i) => (
+            <li class="deal-slot">
+              <button class="deal-card" type="button" aria-pressed="false" data-deal data-n={i + 1}>
+                <span class="visually-hidden" data-deal-sr>{`${d.name}: ${d.up}. The catch: ${d.down}.`}</span>
+                <span class="deal-back" aria-hidden="true"><span class="deal-v">V</span></span>
+                <span class={`deal-face r-${d.rarity}`} data-face aria-hidden="true">
+                  <Px sheet="deal_icons" frame={i} />
+                  <span class="deal-name">{d.name}</span>
+                  <span class="deal-up">+ {d.up}</span>
+                  <span class="deal-down">- {d.down}</span>
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </article>
+
+      <!-- Charms -->
+      <article class="charms panel" aria-labelledby="charms-title">
+        <div class="deal-head">
+          <h3 id="charms-title" class="item-title">Charms</h3>
+          <p class="item-text">Small edges that stack into broken ones.</p>
+        </div>
+        <ul class="charm-list">
+          {CHARMS.map((c, i) => (
+            <li class="charm">
+              <span class={`slot-frame r-${c.rarity}`}><Px sheet="charm_icons" frame={i} /></span>
+              <span class="power-name">{c.name}</span>
+              <span class="power-line">{c.line}</span>
+            </li>
+          ))}
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bet { background: linear-gradient(to bottom, #2a1a2e, var(--night) 18%, var(--night)); }
+  .floor {
+    --px: 1;
+    display: grid; gap: clamp(18px, 2.4vw, 28px);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  @media (min-width: 1100px) { .slot, .box { --px: 2; } }
+  @media (min-width: 1240px) and (min-height: 760px) { .slot { --px: 3; } }
+
+  .item-title { margin: 0; font: 700 clamp(1.1rem, 1.7vw, 1.4rem)/1.1 var(--pixel); text-transform: uppercase; color: var(--gold-l); }
+  .item-text { margin: 0; color: var(--text-dim); line-height: 1.5; max-width: 44ch; }
+
+  /* Rarity borders: common text-dim, uncommon felt, rare teal. */
+  .r-common { --rar: var(--text-dim); }
+  .r-uncommon { --rar: var(--felt); }
+  .r-rare { --rar: var(--teal); }
+
+  /* ---------- Slot ---------- */
+  .slot {
+    grid-column: span 7; grid-row: span 2;
+    display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(16px, 2.6vw, 36px); align-items: center;
+    padding: clamp(18px, 2.4vw, 30px);
+    background: radial-gradient(70% 80% at 25% 60%, rgb(255 79 163 / 0.12), transparent 70%), var(--slate);
+  }
+  .slot-art { position: relative; line-height: 0; justify-self: center; }
+  .slot-glow {
+    position: absolute; left: 50%; bottom: -6px; width: 120%; height: 30px; transform: translateX(-50%);
+    background: radial-gradient(closest-side, rgb(255 201 60 / 0.35), transparent); pointer-events: none;
+  }
+  .slot-ui { display: grid; gap: 14px; align-content: center; justify-items: start; }
+  .reels { display: flex; gap: 8px; padding: 10px; background: var(--ink); border: 2px solid var(--ink); box-shadow: inset 0 0 0 2px var(--gold-d); }
+  .reel {
+    width: 64px; height: 64px; display: grid; place-items: center; overflow: hidden;
+    background: var(--text); border: 2px solid var(--ink); box-shadow: inset 0 -6px 0 rgb(20 16 31 / 0.15);
+  }
+  .reel :global(svg) { max-width: 52px; max-height: 48px; width: auto; height: auto; }
+  .sym[hidden] { display: none; }
+  .sym { line-height: 0; }
+  :global(.spinning) .sym { animation: none; }
+  .slot-result { margin: 0; min-height: 2.8em; font: 700 0.95rem/1.4 var(--pixel); color: var(--text); max-width: 30ch; }
+  .slot-result[data-win='true'] { color: var(--gold); }
+  .slot-result[data-win='jackpot'] { color: var(--neon); }
+  .slot-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+  .pull { min-width: 150px; }
+  .pull-cost { padding: 3px 6px; background: var(--ink); color: var(--gold-l); font-size: 0.8rem; }
+  .sack { margin: 0; display: inline-flex; align-items: center; gap: 8px; font: 700 1.1rem var(--pixel); color: var(--gold-l); font-variant-numeric: tabular-nums; }
+  .loan[hidden] { display: none; }
+
+  /* ---------- Bursts of coins (created by the script) ---------- */
+  .burst { position: absolute; left: 50%; top: 45%; width: 0; height: 0; pointer-events: none; z-index: 3; }
+  .burst :global(.bc) {
+    position: absolute; background-repeat: no-repeat; image-rendering: pixelated;
+  }
+
+  /* ---------- Lockbox ---------- */
+  .box {
+    grid-column: span 5; padding: clamp(18px, 2.4vw, 26px);
+    display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto 1fr; gap: 8px 22px; align-items: start;
+  }
+  .box-btn {
+    grid-row: 1 / -1; position: relative; display: grid; justify-items: center; gap: 10px; padding: 14px 14px 12px;
+    background: radial-gradient(closest-side, rgb(255 201 60 / 0.16), transparent), var(--ink);
+    border: 2px solid var(--ink); box-shadow: inset 0 0 0 2px var(--slate-hi); line-height: 0;
+  }
+  .box-btn:hover { box-shadow: inset 0 0 0 2px var(--gold-d); }
+  .box-cta { font: 700 0.75rem/1 var(--pixel); text-transform: uppercase; color: var(--gold-l); }
+  .box-result { margin: 0; font: 700 0.9rem/1.4 var(--pixel); color: var(--gold); min-height: 1.4em; }
+
+  /* ---------- Powers / charms ---------- */
+  .powers { grid-column: span 5; padding: clamp(18px, 2.4vw, 26px); display: grid; gap: 10px; align-content: start; }
+  .hotbar, .charm-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 14px; }
+  .hotbar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .power, .charm { display: grid; justify-items: center; text-align: center; gap: 6px; align-content: start; }
+  .slot-frame {
+    display: grid; place-items: center; line-height: 0; padding: 6px;
+    background: var(--ink); border: 2px solid var(--ink); box-shadow: inset 0 0 0 3px var(--rar), 3px 3px 0 var(--ink);
+  }
+  .key { font: 700 0.8rem/1 var(--pixel); color: var(--text-dim); }
+  .power-name { font: 700 0.78rem/1.2 var(--pixel); text-transform: uppercase; color: var(--text); }
+  .power-line { font-size: 0.88rem; line-height: 1.35; color: var(--text-dim); max-width: 18ch; }
+
+  .charms { grid-column: 1 / -1; padding: clamp(18px, 2.4vw, 26px); display: grid; grid-template-columns: minmax(200px, 0.8fr) 3fr; gap: 20px 28px; align-items: center; }
+  .charm-list { grid-template-columns: repeat(5, minmax(0, 1fr)); margin: 0; }
+
+  /* ---------- The Boss's Deal: three face-down cards ---------- */
+  .deal {
+    grid-column: 1 / -1; padding: clamp(18px, 2.4vw, 30px);
+    display: grid; grid-template-columns: minmax(200px, 0.8fr) 3fr; gap: 20px 28px; align-items: center;
+    background: radial-gradient(60% 90% at 70% 50%, rgb(155 35 53 / 0.3), transparent 70%), var(--slate);
+  }
+  .deal-head { display: grid; gap: 10px; align-content: center; }
+  .deals { list-style: none; margin: 0; padding: 0; display: flex; justify-content: center; flex-wrap: wrap; gap: clamp(14px, 2vw, 26px); perspective: 1000px; }
+  .deal-card {
+    position: relative; display: block; width: 210px; height: 290px;
+    transform-style: preserve-3d; transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.3, 1.2);
+  }
+  .deal-card:hover { transform: translateY(-6px); }
+  .deal-card[aria-pressed='true'] { transform: rotateY(180deg); }
+  .deal-back, .deal-face {
+    position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border: 2px solid var(--ink); box-shadow: 5px 5px 0 var(--ink);
+  }
+  .deal-back {
+    display: grid; place-items: center;
+    background:
+      repeating-linear-gradient(45deg, transparent 0 10px, rgb(255 154 138 / 0.16) 10px 12px),
+      repeating-linear-gradient(-45deg, transparent 0 10px, rgb(255 154 138 / 0.16) 10px 12px),
+      var(--crim-d);
+    outline: 3px solid var(--gold-d); outline-offset: -12px;
+  }
+  .deal-v {
+    font: 700 3rem/1 var(--pixel); color: var(--gold); text-shadow: 3px 3px 0 var(--ink);
+    width: 84px; height: 84px; display: grid; place-items: center; background: var(--crim-d); border: 2px solid var(--ink); box-shadow: inset 0 0 0 3px var(--gold-d);
+  }
+  .deal-face {
+    transform: rotateY(180deg);
+    display: grid; justify-items: center; align-content: start; gap: 8px; padding: 18px 14px; text-align: center;
+    background: var(--text); color: var(--ink); box-shadow: inset 0 0 0 4px var(--rar), 5px 5px 0 var(--ink);
+  }
+  .deal-name { font: 700 0.9rem/1.15 var(--pixel); text-transform: uppercase; }
+  .deal-up { font-size: 0.9rem; font-weight: 700; color: var(--felt-d); line-height: 1.3; }
+  .deal-down { font-size: 0.9rem; font-weight: 700; color: var(--crim-d); line-height: 1.3; }
+  /* Without JS the cards are dealt face up. */
+  :global(html:not(.js)) .deal-card { transform: rotateY(180deg); }
+  @media (prefers-reduced-motion: reduce) { .deal-card { transition: none; } .deal-card:hover { transform: none; } .deal-card[aria-pressed='true'] { transform: rotateY(180deg); } }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1099px) {
+    .slot, .box, .powers { grid-column: 1 / -1; grid-row: auto; }
+    .deal, .charms { grid-template-columns: minmax(0, 1fr); }
+    .charm-list { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .slot { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+    .slot-ui { justify-items: center; text-align: center; }
+    .box { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; }
+    .box-btn { grid-row: auto; }
+    .hotbar { grid-template-columns: minmax(0, 1fr); }
+    .power { grid-template-columns: auto 1fr; justify-items: start; text-align: left; column-gap: 14px; }
+    .power .slot-frame { grid-row: span 3; }
+    .power .key { display: none; }
+    .reel { width: 56px; height: 56px; }
+    .deal-card { width: 100%; max-width: 340px; height: 150px; }
+    .deal-face { grid-template-columns: auto 1fr; grid-template-rows: auto auto auto; justify-items: start; align-content: center; text-align: left; column-gap: 14px; row-gap: 4px; padding: 12px 14px; }
+    .deal-face :global(.px) { grid-row: 1 / span 3; }
+    .deal-v { width: 64px; height: 64px; font-size: 2.2rem; }
+    .deals { flex-direction: column; align-items: center; }
+    .deal-slot { width: 100%; display: flex; justify-content: center; }
+  }
+</style>

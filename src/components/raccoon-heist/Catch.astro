@@ -1,0 +1,100 @@
+---
+// Night falls. Don Vermino explains the catch, one line at a time, in the game's dialogue box.
+// He idles (look, the odd blink or raised brow) and talks (frames 4-5) while a line types. All lines are real text in the HTML.
+import Px from './Px.astro';
+import { CATCH_LINES, SHEETS } from './data';
+
+const [bw, bh] = SHEETS.vermino_bust.cell;
+---
+
+<section id="catch" class="rh-sec catch" aria-labelledby="catch-title">
+  <div class="rh-wrap catch-grid">
+    <div class="office" aria-hidden="true" style={`--bw:${bw};--bh:${bh}`}>
+      <span class="office-lamp"></span>
+      <Px sheet="vermino_bust" class="boss" data-bust="catch" />
+      <span class="desk"></span>
+    </div>
+
+    <div class="catch-copy">
+      <div class="rh-head">
+        <p class="rh-kicker">Dusk, the night Rocco gets lucky</p>
+        <h2 id="catch-title" class="rh-h2">The catch</h2>
+        <p class="rh-lede">Rocco "The Bandit" won the worst casino in town in a rigged card game. Then the Rat Boss explained the rules.</p>
+      </div>
+
+      <figure class="talk panel" data-talk>
+        <figcaption class="talk-name">Don Vermino</figcaption>
+        <blockquote class="talk-lines">
+          {CATCH_LINES.map((line) => <p class="talk-line" data-line>{line}</p>)}
+        </blockquote>
+        <span class="talk-more" aria-hidden="true"></span>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .catch {
+    background: linear-gradient(to bottom, #24152F, var(--night) 45%);
+  }
+  .catch-grid {
+    --px: 1;
+    display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: center;
+  }
+  @media (min-width: 1000px) { .catch-grid { --px: 2; } }
+  @media (min-width: 1240px) and (min-height: 760px) { .catch-grid { --px: 3; } }
+
+  /* His office: a lamp pool on the wall, the bust behind a desk. */
+  .office {
+    position: relative; display: grid; justify-items: center; align-content: end;
+    width: calc(var(--bw) * var(--px) * 1px + 120px); height: calc(var(--bh) * var(--px) * 1px + 90px);
+    background:
+      radial-gradient(60% 55% at 50% 30%, rgb(255 201 60 / 0.28), transparent 70%),
+      repeating-linear-gradient(90deg, #2a1a22 0 22px, #241620 22px 24px),
+      #2a1a22;
+    border: 2px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); overflow: hidden;
+  }
+  .office-lamp {
+    position: absolute; top: 0; left: 50%; width: 46px; height: 14px; transform: translateX(-50%);
+    background: var(--gold-d); border: 2px solid var(--ink); border-top: 0; box-shadow: 0 6px 0 -2px var(--gold-l);
+  }
+  .office :global(.boss) { position: relative; z-index: 1; margin-bottom: 30px; }
+  .desk {
+    position: absolute; left: -2px; right: -2px; bottom: 0; height: 48px; z-index: 2;
+    background: linear-gradient(to bottom, #A06A47 0 6px, #5A3A2E 6px 100%);
+    border-top: 2px solid var(--ink);
+  }
+
+  .talk { position: relative; margin: 0; padding: 30px clamp(18px, 2.6vw, 30px) 26px; max-width: 40rem; }
+  .talk-name {
+    position: absolute; top: -18px; left: 18px;
+    font: 700 0.8rem/1 var(--pixel); text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--text); background: var(--crim-d); padding: 9px 12px; border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink);
+  }
+  .talk-lines { margin: 0; display: grid; gap: 14px; }
+  .talk-line {
+    margin: 0; position: relative; padding-left: 26px;
+    font: 700 clamp(1.05rem, 1.7vw, 1.4rem)/1.35 var(--pixel); color: var(--text);
+  }
+  .talk-line::before { content: '>'; position: absolute; left: 0; color: var(--crim-l); }
+  .talk-line:last-child { color: var(--gold-l); }
+  .talk-more {
+    position: absolute; right: 16px; bottom: 10px; width: 12px; height: 8px;
+    background: var(--gold); clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .talk-more { animation: nudge 0.8s steps(2) infinite; }
+  }
+  @keyframes nudge { 50% { transform: translateY(3px); } }
+
+  /* Typing state (set by script): lines not yet reached stay hidden but keep their space. */
+  :global(.js-motion) .talk-line[data-state='wait'] { visibility: hidden; }
+
+  @media (max-width: 760px) {
+    /* Phones: heading, then the Boss, then what he says. */
+    .catch-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+    .catch-copy { display: contents; }
+    .catch-copy .rh-head { order: -1; margin-bottom: 0; }
+    .office { width: 100%; }
+  }
+</style>
