@@ -2,6 +2,7 @@
 // A post's cover: the real image with its label, or, while the image is still being made,
 // a placeholder that says what will go there. Also styles the in-post placeholders (.post-ph).
 import { cover as getCover, type Post } from '../lib/devlog';
+import { imageSize } from '../lib/image-size';
 
 interface Props {
   post: Post;
@@ -11,6 +12,7 @@ interface Props {
 
 const { post, eager = false } = Astro.props;
 const c = getCover(post);
+const size = c && !c.todo ? await imageSize(c.src) : null;
 ---
 
 {c && (
@@ -23,7 +25,7 @@ const c = getCover(post);
       </div>
     ) : (
       <div class="post-img">
-        <img src={c.src} alt={c.alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+        <img src={c.src} alt={c.alt} width={size?.width} height={size?.height} loading={eager ? 'eager' : 'lazy'} decoding="async" />
         {c.label && <span class="post-label">{c.label}</span>}
       </div>
     )}

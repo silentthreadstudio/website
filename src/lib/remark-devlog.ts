@@ -6,6 +6,8 @@
 // - A real image on its own line, with a title "Caption | Label", becomes a figure with its
 //   label (Concept art, In development) on the image and the caption under it.
 
+import { imageSize } from './image-size';
+
 interface Node {
   type: string;
   value?: string;
@@ -33,34 +35,35 @@ function placeholder(alt: string): Node {
   };
 }
 
-function figure(img: Node): Node {
+function figure(img: Node, size: { width: number; height: number } | null): Node {
   const [caption = '', label = ''] = (img.title ?? '').split('|').map((t) => t.trim());
+  const dims = size ? ` width="${size.width}" height="${size.height}"` : '';
   return {
     type: 'html',
     value:
       `<figure class="post-fig"><div class="post-img">` +
-      `<img src="${esc(img.url ?? '')}" alt="${esc(img.alt ?? '')}" loading="lazy" decoding="async" />` +
+      `<img src="${esc(img.url ?? '')}" alt="${esc(img.alt ?? '')}"${dims} loading="lazy" decoding="async" />` +
       (label ? `<span class="post-label">${esc(label)}</span>` : '') +
       `</div>` + (caption ? `<figcaption>${esc(caption)}</figcaption>` : '') + `</figure>`,
   };
 }
 
-function walk(node: Node) {
+async function walk(node: Node) {
   if (!node.children) return;
-  node.children = node.children
+  node.children = await Promise.all(node.children
     .filter((c) => !isComment(c))
-    .map((c) => {
+    .map(async (c) => {
       // An image alone on its line becomes a figure (or a placeholder while it is TODO).
       if (c.type === 'paragraph' && c.children) {
         const kids = c.children.filter((k) => !isBlank(k) && !isComment(k));
         if (kids.length === 1 && kids[0].type === 'image') {
           if (kids[0].url === 'TODO') return placeholder(kids[0].alt ?? '');
-          if (kids[0].title) return figure(kids[0]);
+          if (kids[0].title) return figure(kids[0], await imageSize(kids[0].url ?? ''));
         }
       }
       return c;
-    });
-  node.children.forEach(walk);
+    }));
+  await Promise.all(node.children.map(walk));
 }
 
 export function remarkDevlog() {
