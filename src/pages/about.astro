@@ -1,0 +1,77 @@
+---
+import Base from '../layouts/Base.astro';
+import tile from '../assets/tile.svg?raw';
+import { founder, breadcrumb } from '../lib/schema';
+
+const principles = [
+  'Say less. Let the work be the loud part.',
+  'The games can be loud. The studio stays calm.',
+  'No hype words, no invented numbers.',
+  'Be honest about how things are made, including where AI helped.',
+];
+---
+
+<Base title="About | Silent Thread" description="The origin of Silent Thread, the mark, and how the studio works." schema={[founder(), breadcrumb([{ name: 'About', path: '/about' }])]}>
+  <section class="section about-head" aria-labelledby="about-title">
+    <div class="sec-head">
+      <p class="label">About</p>
+      <h1 id="about-title" class="h2" data-reveal>Made after hours.</h1>
+    </div>
+    <div class="prose" data-reveal-group>
+      <p>For years I built products for other companies. That was my main thread: the work everyone could see, with someone else's name on it.</p>
+      <p>At night, on one machine, I kept building my own things. Small games, plugins, dev tools nobody asked for. That was the silent thread.</p>
+      <p>In code, a background thread keeps working while the main program gets the attention. In nature, a silk thread is the line a spider drops on: almost invisible, strong enough to hold its weight.</p>
+      <p>Silent Thread is that second thread becoming a studio.</p>
+      <p class="sign">Esteban Estrada, founder</p>
+    </div>
+  </section>
+
+  <section class="section mark" aria-labelledby="mark-title">
+    <div class="mark-tile" set:html={tile} aria-hidden="true" />
+    <div class="mark-copy">
+      <p class="label sec-label" style="--drop:16vh" data-sec><span class="sec-thread" aria-hidden="true"></span>The mark</p>
+      <h2 id="mark-title" class="h3" data-reveal>One line ending in a weight.</h2>
+      <p>The mark is the silent thread. It hangs from the edge of whatever it lives on: a tile, a card, the top of a screen. In the wordmark it replaces the I of SILENT.</p>
+      <p><a class="link" href="https://github.com/silentthreadstudio/brand" rel="noopener">Brand and design system <span aria-hidden="true">↗</span></a></p>
+    </div>
+  </section>
+
+  <section class="section principles" aria-labelledby="principles-title">
+    <p class="label sec-label" style="--drop:16vh" data-sec><span class="sec-thread" aria-hidden="true"></span>How we work</p>
+    <h2 id="principles-title" class="visually-hidden">How we work</h2>
+    <ol>
+      {principles.map((p) => <li data-principle>{p}</li>)}
+    </ol>
+  </section>
+</Base>
+
+<script>
+  import { initMotion } from '../scripts/motion';
+  initMotion();
+</script>
+
+<style>
+  .about-head { padding-top: calc(var(--header-h) + 12vh); border-top: 0; }
+  .sign { margin-top: 2rem !important; font: 400 0.78rem var(--font-mono); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--fg-3); }
+
+  .mark { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 36rem); gap: 2rem 6vw; align-items: center; }
+  .mark-tile { width: 100%; max-width: 220px; aspect-ratio: 1; border: 1px solid var(--surface); border-radius: 14%; }
+  .mark-tile :global(svg) { display: block; width: 100%; height: 100%; }
+  .mark-copy { display: grid; gap: 1rem; }
+  .mark-copy p:not(.label) { margin: 0; color: var(--fg-3); font-size: 1.1rem; }
+
+  .principles { display: grid; gap: 2.5rem; }
+  .principles ol { list-style: none; margin: 0; padding: 0; display: grid; }
+  .principles li {
+    padding-block: 1.1rem; border-bottom: 1px solid var(--surface);
+    font: 700 clamp(1.3rem, 3vw, 2.4rem)/1.15 var(--font-display); font-stretch: 112%; text-wrap: balance;
+  }
+  .principles li:first-child { border-top: 1px solid var(--surface); }
+  :global(html.motion) .principles li { color: var(--fg-3); transition: color 0.5s var(--motion-ease); }
+  :global(html.motion) .principles li.on { color: var(--fg); }
+
+  @media (max-width: 760px) {
+    .mark { grid-template-columns: minmax(0, 1fr); }
+    .mark-tile { max-width: 140px; }
+  }
+</style>

@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Devlog | Silent Thread" description="Notes from the night shift at Silent Thread." noindex>
+  <section class="section devlog" aria-labelledby="devlog-title">
+    <div class="sec-head">
+      <p class="label">Devlog</p>
+      <h1 id="devlog-title" class="h2">Notes from the night shift.</h1>
+    </div>
+    <p class="prose">No entries yet. The first one is being written after hours. <a class="link" href="https://x.com/silentthreadhq" rel="me noopener">Follow on X <span aria-hidden="true">↗</span></a></p>
+  </section>
+</Base>
+
+<style>
+  .devlog { padding-top: calc(var(--header-h) + 12vh); border-top: 0; min-height: 70svh; }
+</style>

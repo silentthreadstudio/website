@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTACT_EMAIL } from '../site';
+import { breadcrumb } from '../lib/schema';
+---
+
+<Base title="Press | Silent Thread" description="Press kit for Silent Thread: logos, colours, type and contact." schema={[breadcrumb([{ name: 'Press', path: '/press' }])]}>
+  <section class="section press" aria-labelledby="press-title">
+    <div class="sec-head">
+      <p class="label">Press</p>
+      <h1 id="press-title" class="h2">Press kit.</h1>
+    </div>
+    <div class="prose">
+      <p>A full press kit is on the way. Until then, the logo files, colours, type and the short bios are in the studio's public brand repository.</p>
+      <p>Silent Thread is a game studio and dev-tools Lab from Colombia, founded by Esteban Estrada.</p>
+    </div>
+    <p class="press-links">
+      <a class="link" href="https://github.com/silentthreadstudio/brand" rel="noopener">Brand and logos <span aria-hidden="true">↗</span></a>
+      <a class="link" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .press { padding-top: calc(var(--header-h) + 12vh); border-top: 0; min-height: 70svh; }
+  .press-links { margin: 2rem 0 0; display: flex; flex-wrap: wrap; gap: 0.8rem 2rem; }
+</style>
