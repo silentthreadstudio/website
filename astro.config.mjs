@@ -3,8 +3,8 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { remarkDevlog } from './src/lib/remark-devlog';
 
-// Pages that stay out of the sitemap (and carry noindex): error pages, newsletter steps, and the devlog until launch.
-const UNLISTED = ['/404', '/500', '/devlog', '/subscribed', '/confirmed'];
+// Pages that stay out of the sitemap (and carry noindex): error pages and newsletter steps.
+const UNLISTED = ['/404', '/500', '/subscribed', '/confirmed'];
 
 // https://astro.build/config
 export default defineConfig({

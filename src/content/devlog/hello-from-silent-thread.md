@@ -1,13 +1,13 @@
 ---
 title: "Hello from Silent Thread"
 description: "Silent Thread is a game studio from Medellín, Colombia. It started as the work I did after hours. Why it exists, and what it's making."
-pubDate: TODO
+pubDate: 2026-10-21
 type: studio
 tags: [studio]
 cover: "/og.png"
 coverAlt: "The Silent Thread wordmark, with the I drawn as a hanging thread, under a row of threads dropping from the top. Games and developer tools, Colombia."
 coverLabel: ""
-draft: true
+draft: false
 ---
 
 <!-- Image slot H1 (cover): Silent Thread mark or approved founder portrait. Owner picks. No label needed (not game art). -->
@@ -28,7 +28,7 @@ Silent Thread is that second thread becoming a studio.
 
 The first game is **Raccoon Heist**. A raccoon wins the worst casino in town, and the Rat Mob wants their cut. It's a casino roguelite in 2D isometric pixel art, made in Godot, on PC first and headed to Steam.
 
-Next to the games there is **the Lab**, where the tools live. <!-- TODO owner: link to the public Lab page or repos. -->
+Next to the games there is **[the Lab](/#work)**, where the tools live.
 
 ## How it's made
 

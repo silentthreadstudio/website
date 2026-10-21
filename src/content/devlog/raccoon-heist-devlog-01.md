@@ -1,7 +1,7 @@
 ---
 title: "Raccoon Heist devlog #1: one night works"
 description: "What Raccoon Heist is, what already plays, and what the current milestone adds."
-pubDate: TODO
+pubDate: 2026-10-21
 type: devlog
 tags: [raccoon-heist, devlog]
 game: raccoon-heist
@@ -9,7 +9,7 @@ number: 1
 cover: "/devlog/devlog-01-cover.png"
 coverAlt: "Rocco the raccoon holds a coin sack on the casino carpet between two rat thugs in black suits, while a dice goon hops past slot machines and a roulette table."
 coverLabel: "Concept art"
-draft: true
+draft: false
 ---
 
 <!-- Image slot D1-1 (cover): Raccoon Heist key art. Label: Concept art. -->
@@ -34,8 +34,6 @@ One rule drives everything: **every click is a bet**. Gold you spend on powers a
 
 - **Moving and fighting.** Your cursor steers Rocco and he attacks on his own. The frequent work is automatic, so your clicks stay rare and worth something.
 - **A full night.** Waves of goons, a clock running down to the deadline, and a protection-money bar that fills as you earn. At the deadline you pay or go bankrupt.
-
-![TODO: gameplay capture after the effects pass: a stretch of one night with waves, coins and the protection-money bar. Caption: One night, mid-wave. Label: In development](TODO)
 
 The deadline is tense and the movement feels right. What a night needs next is choices: things worth spending on between paydays. A deadline with no choices is just a timer.
 

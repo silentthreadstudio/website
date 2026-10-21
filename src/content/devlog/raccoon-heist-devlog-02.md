@@ -1,7 +1,7 @@
 ---
 title: "Raccoon Heist devlog #2: how a character gets made"
 description: "From a canonical model sheet to an 80-pixel sprite on the casino floor: the five steps every Raccoon Heist character goes through."
-pubDate: TODO
+pubDate: 2026-10-21
 type: devlog
 tags: [raccoon-heist, devlog, art]
 game: raccoon-heist
@@ -9,7 +9,7 @@ number: 2
 cover: "/devlog/cast-lineup.png"
 coverAlt: "Rocco, a rat thug, a dice goon and Don Vermino in pixel art, standing on one floor line."
 coverLabel: "Concept art"
-draft: true
+draft: false
 ---
 
 <!-- Queued follow-up, not a launch post. Publish about two weeks after launch, or alongside the first playtest post. -->

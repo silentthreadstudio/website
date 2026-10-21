@@ -7,8 +7,7 @@ import { getPosts, postUrl, kicker, formatDate, SHOW_DRAFTS } from '../lib/devlo
 const posts = await getPosts();
 ---
 
-<!-- Hidden from search (noindex + UNLISTED in astro.config.mjs) until the first post launches. -->
-<Base title="Devlog | Silent Thread" description="Notes from the night shift at Silent Thread." noindex schema={[breadcrumb([{ name: 'Devlog', path: '/devlog' }])]}>
+<Base title="Devlog | Silent Thread" description="Notes from the night shift at Silent Thread." schema={[breadcrumb([{ name: 'Devlog', path: '/devlog' }])]}>
   <link slot="head" rel="alternate" type="application/rss+xml" title="Silent Thread devlog" href="/devlog/rss.xml" />
   <section class="section devlog" aria-labelledby="devlog-title">
     <div class="sec-head">
