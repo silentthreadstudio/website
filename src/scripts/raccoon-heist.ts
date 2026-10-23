@@ -1,6 +1,6 @@
 // Raccoon Heist game page. One night told by scrolling:
 // dusk opening -> the Boss's catch -> the night (HUD fills) -> the floor -> the cast -> the casino grows -> dawn.
-// Interactions (slot, lockbox, Deal cards) always work. With reduced motion nothing scrubs or flies:
+// Interactions (slot, lockbox) always work. With reduced motion nothing scrubs or flies:
 // the CSS defaults are the composed final frames and interactions resolve instantly.
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -27,7 +27,6 @@ export function initRaccoonHeist() {
   loadSprites();
   slotMachine();
   lockbox();
-  dealCards();
   if (reduce) return;
   smoothScroll();
   hero();
@@ -376,7 +375,7 @@ function slotMachine() {
   const root = $('[data-slot]');
   if (!root) return;
   const btn = $<HTMLButtonElement>('[data-pull]', root)!;
-  const loan = $<HTMLButtonElement>('[data-loan]', root)!;
+  const reset = $<HTMLButtonElement>('[data-reset]', root)!;
   const sackEl = $('[data-sack]', root)!;
   const result = $('[data-slot-result]', root)!;
   const px = $('[data-slot-px]', root)!;
@@ -392,7 +391,7 @@ function slotMachine() {
     sackEl.textContent = String(sack);
     const broke = sack < SLOT.cost;
     btn.disabled = broke || busy;
-    loan.hidden = !broke;
+    reset.hidden = !broke || busy;
   };
 
   const pull = async () => {
@@ -440,10 +439,10 @@ function slotMachine() {
   btn.addEventListener('click', pull);
   art.addEventListener('click', pull);
   art.style.cursor = 'pointer';
-  loan.addEventListener('click', () => {
-    sack += 300;
+  reset.addEventListener('click', () => {
+    sack = SLOT.start;
     result.dataset.win = 'false';
-    result.textContent = "The Boss's Loan: a pile of gold now. Next night's demand +25%.";
+    result.textContent = 'Fresh sack. Try your luck again.';
     update();
     btn.focus();
   });
@@ -481,20 +480,4 @@ function lockbox() {
   btn.addEventListener('click', () => (open ? close() : openBox()));
   // Standing close is enough: hovering opens it, like walking up to it in the game.
   if (fine) btn.addEventListener('pointerenter', () => { if (!open) openBox(); });
-}
-
-function dealCards() {
-  // Without JS the cards are dealt face up and the hidden text already reads the card.
-  // With JS they start face down: the button says so, and turning it over reads the card.
-  $$<HTMLButtonElement>('[data-deal]').forEach((card) => {
-    const sr = $('[data-deal-sr]', card)!;
-    const faceText = sr.textContent ?? '';
-    const down = `Deal card ${card.dataset.n}, face down. Turn it over.`;
-    sr.textContent = down;
-    card.addEventListener('click', () => {
-      const flipped = card.getAttribute('aria-pressed') !== 'true';
-      card.setAttribute('aria-pressed', String(flipped));
-      sr.textContent = flipped ? faceText : down;
-    });
-  });
 }

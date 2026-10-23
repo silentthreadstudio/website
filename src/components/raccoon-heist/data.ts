@@ -30,9 +30,6 @@ export const SHEETS = {
   vermino_bust: hd('vermino_bust', 6, [238, 264], 6),
   slot_machine: hd('slot_machine', 7, [220, 272], 8),
   lockbox: hd('lockbox', 5, [144, 120], 10),
-  charm_icons: hd('charm_icons', 5, [102, 104]),
-  deal_icons: hd('deal_icons', 5, [112, 104]),
-  power_icons: hd('power_icons', 3, [104, 104]),
   coin: hd('coin_m', 6, [27, 26], 10),
   cards: hd('cards_s', 4, [53, 61]),
 } satisfies Record<string, Sheet>;
@@ -47,29 +44,6 @@ export const CATCH_LINES = [
   'Winner takes the casino. Congratulations, kid.',
   'Nice place. Shame if something happened to it.',
   "The bill's due Friday. Every Friday.",
-];
-
-export const POWERS = [
-  { name: 'All In', key: '1', rarity: 'rare', line: 'Bet the whole sack on a kill streak.' },
-  { name: 'Double Down', key: '2', rarity: 'common', line: 'Hit twice as hard. Bleed twice as fast.' },
-  { name: 'Jackpot Bomb', key: '3', rarity: 'common', line: 'Clear the room. Rain coins.' },
-];
-
-export const CHARMS = [
-  { name: 'Four Leaf Clover', rarity: 'common', line: 'Luck, everywhere.' },
-  { name: 'Marked Card', rarity: 'uncommon', line: 'Your cards go through.' },
-  { name: 'Seventh Seal', rarity: 'uncommon', line: 'Lucky sevens pay.' },
-  { name: 'Last Chip', rarity: 'uncommon', line: "Strongest when you're almost out." },
-  { name: 'House Key', rarity: 'rare', line: 'Every wave hides a box.' },
-];
-
-/** deal_icons frames 0-4, in order: each card's upside and its catch (copy from the game's strings). */
-export const DEALS = [
-  { name: 'Fat Envelope', rarity: 'uncommon', up: 'Gold per coin +50%', down: 'Rat thugs move 20% faster' },
-  { name: "The Boss's Loan", rarity: 'uncommon', up: 'A big stack of gold, right now', down: "Next night's protection +25%" },
-  { name: 'Glass Jaw', rarity: 'rare', up: 'Weapon damage +40%', down: 'Max HP -3' },
-  { name: 'Shiny Hunting', rarity: 'uncommon', up: 'Shinies show up 3× as often', down: 'Shinies have 2× HP' },
-  { name: 'Rigged Machines', rarity: 'uncommon', up: 'Machine prices -50%', down: 'Machines bust more often' },
 ];
 
 export const CAST = [
@@ -101,18 +75,15 @@ export const SLOT = {
     { id: 'bust', weight: 40, gold: 0, text: 'Bust. The house wins.' },
     { id: 'cherry', weight: 25, gold: 90, text: 'Cherries. Coins spray out: +90.' },
     { id: 'bell', weight: 12, gold: 0, text: 'Bell. +50% damage for 10 seconds.' },
-    { id: 'bar', weight: 10, gold: 0, text: 'Bar. +1 power charge.' },
     { id: 'lemon', weight: 10, gold: 0, text: 'Lemon. Three walking dice burst out.' },
     { id: 'seven', weight: 3, gold: 600, text: '777. JACKPOT: ten times the bet.' },
   ],
 };
 
-/** Lockbox outcomes (plain box). */
+/** Lockbox outcomes: a burst of gold, or a moth. */
 export const LOCKBOX = [
-  { weight: 45, gold: true, text: 'Gold burst. Go collect.' },
-  { weight: 25, gold: false, text: '+1 power charge.' },
-  { weight: 10, gold: false, text: 'A charm.' },
-  { weight: 20, gold: false, text: 'A moth flies out. Rocco shrugs.' },
+  { weight: 1, gold: true, text: 'Gold burst. Go collect.' },
+  { weight: 1, gold: false, text: 'A moth flies out. Rocco shrugs.' },
 ];
 
 // Reel symbols as pixel grids (one char = one art pixel), drawn as crisp SVG in the game palette.
