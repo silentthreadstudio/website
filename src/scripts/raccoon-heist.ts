@@ -238,7 +238,7 @@ function night() {
   const fight = $('[data-beat="fight"]'), grab = $('[data-beat="grab"]'), pay = $('[data-beat="pay"]');
   if (!hud || !fight || !grab || !pay) return;
 
-  const coinsEl = $('[data-hud-coins]', hud)!, protEl = $('[data-hud-prot]', hud)!, timeEl = $('[data-hud-time]', hud)!;
+  const coinsEl = $('[data-hud-coins]', hud)!, timeEl = $('[data-hud-time]', hud)!;
   const fill = $('[data-hud-fill]', hud)!;
   const p = { fight: 0, grab: 0, pay: 0 };
   const DEMAND = 500, NIGHT = 240;
@@ -247,8 +247,7 @@ function night() {
     const paid = p.pay >= 0.8;
     const gold = Math.round(120 * p.fight + (DEMAND - 120) * p.grab);
     const left = Math.max(0, Math.round(NIGHT * (1 - Math.min(1, (p.fight + p.grab + p.pay / 0.8) / 3))));
-    coinsEl.textContent = String(paid ? 0 : gold);
-    protEl.textContent = String(gold);
+    coinsEl.textContent = paid ? 'Paid' : String(gold);
     fill.style.setProperty('--fill', String(gold / DEMAND));
     timeEl.textContent = left === 0 ? 'Dawn' : `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`;
     hud.dataset.dawn = String(left === 0);

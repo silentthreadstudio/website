@@ -1,5 +1,5 @@
 ---
-// The loop as one night in one casino. A HUD styled like the game's (coins, protection bar, time to dawn)
+// The loop as one night in one casino. A HUD styled like the game's (hearts, the sack meter, the clock)
 // rides along and fills as you scroll: Fight -> Grab the coins -> Pay by Friday.
 // Every scene is a stage measured in art pixels (U = --px screen px). All geometry comes from the sheets'
 // cell sizes (data.ts) passed in as CSS vars, so swapping a sprite keeps the anchors.
@@ -37,14 +37,13 @@ const RAIN = Array.from({ length: 16 }, (_, i) => ({ fx: ((i * 0.618) % 1) * 0.9
   <div class="track" data-night>
     <div class="hud-dock">
       <div class="hud" data-hud>
-        <p class="visually-hidden">The game's HUD: the protection money fills as Rocco earns gold, and the clock runs down to dawn.</p>
-        <div class="hud-coins hud-box" aria-hidden="true">
-          <PixelIcon grid={ICONS.coin} scale={3} />
-          <span class="hud-num" data-hud-coins>500</span>
+        <p class="visually-hidden">The game's HUD: Rocco's hearts, the sack of gold filling as he earns, and the clock running down to dawn.</p>
+        <div class="hud-hearts hud-box" aria-hidden="true">
+          {[0, 1, 2].map(() => <PixelIcon grid={ICONS.heart} scale={3} />)}
         </div>
-        <div class="hud-prot hud-box" aria-hidden="true">
-          <span class="hud-label"><span class="hud-word">Protection</span> <span data-hud-prot>500</span>/500</span>
-          <span class="hud-bar"><span class="hud-fill" data-hud-fill></span></span>
+        <div class="hud-sack hud-box" aria-hidden="true">
+          <PixelIcon grid={ICONS.coin} scale={3} />
+          <span class="hud-bar"><span class="hud-fill" data-hud-fill></span><span class="hud-num" data-hud-coins>500</span></span>
         </div>
         <div class="hud-time hud-box" aria-hidden="true">
           <span class="hud-moon"><PixelIcon grid={ICONS.moon} scale={3} /></span>
@@ -149,21 +148,28 @@ const RAIN = Array.from({ length: 16 }, (_, i) => ({ fx: ((i * 0.618) % 1) * 0.9
     box-shadow: inset 2px 2px 0 var(--slate-hi), 4px 4px 0 #0a0812;
   }
   .hud-num { font-variant-numeric: tabular-nums; min-width: 3ch; }
-  .hud-coins .hud-num { color: var(--gold-l); }
-  .hud-prot { flex-direction: column; align-items: stretch; gap: 6px; padding: 8px 14px; min-width: min(380px, 46vw); }
-  .hud-label { display: block; text-align: center; letter-spacing: 0.02em; white-space: nowrap; }
-  .hud-bar { display: block; height: 14px; background: var(--ink); border: 2px solid var(--ink); box-shadow: inset 0 0 0 2px var(--slate); position: relative; }
+  .hud-hearts { gap: 4px; }
+  .hud-hearts :global(.pxi) { display: block; }
+  .hud-moon, .hud-sun { line-height: 0; }
+  /* The sack meter: the gold count sits inside the bar it fills. */
+  .hud-sack { gap: 10px; min-width: min(380px, 46vw); }
+  .hud-bar { position: relative; display: block; flex: 1; height: 28px; background: var(--ink); border: 2px solid var(--ink); box-shadow: inset 0 0 0 2px var(--slate); }
   .hud-fill {
     --fill: 1;
     position: absolute; inset: 2px auto 2px 2px; width: calc((100% - 4px) * var(--fill));
-    background: linear-gradient(to bottom, var(--gold-l) 0 2px, var(--gold) 2px 100%);
+    background: linear-gradient(to bottom, var(--gold-l) 0 3px, var(--gold) 3px 100%);
   }
+  .hud-sack .hud-num {
+    position: absolute; inset: 0; z-index: 1; display: grid; place-items: center; min-width: 0;
+    color: var(--text); text-shadow: 2px 2px 0 var(--ink), -2px -2px 0 var(--ink), 2px -2px 0 var(--ink), -2px 2px 0 var(--ink);
+  }
+  /* The timer chip. */
+  .hud-time { gap: 8px; }
   .hud-time .hud-sun { display: none; }
   .hud[data-dawn='true'] .hud-moon { display: none; }
   .hud[data-dawn='true'] .hud-sun { display: block; }
-  .hud-moon, .hud-sun { line-height: 0; }
-  /* Paid: the bar flashes, the board turns gold. */
-  .hud[data-paid='true'] .hud-prot { background: var(--gold); color: var(--ink); border-color: var(--gold-l); box-shadow: inset 2px 2px 0 var(--gold-l), 4px 4px 0 #0a0812; }
+  /* Paid: the meter flashes and its box turns gold. */
+  .hud[data-paid='true'] .hud-sack { background: var(--gold); border-color: var(--gold-l); box-shadow: inset 2px 2px 0 var(--gold-l), 4px 4px 0 #0a0812; }
   .hud[data-paid='true'] .hud-fill { background: var(--neon); }
   @media (prefers-reduced-motion: no-preference) {
     .hud[data-paid='true'] .hud-fill { animation: paid 0.5s steps(2) 3; }
@@ -297,8 +303,9 @@ const RAIN = Array.from({ length: 16 }, (_, i) => ({ fx: ((i * 0.618) % 1) * 0.9
     .hud { gap: 6px; font-size: 0.78rem; }
     .hud-dock::before { height: 78px; }
     .hud-box { padding: 6px 8px; gap: 6px; }
-    .hud-prot { min-width: 0; flex: 1; padding: 6px 8px; }
-    .hud-word { display: none; }
+    .hud-sack { min-width: 0; flex: 1; gap: 6px; }
+    .hud-bar { height: 24px; }
+    .hud-hearts { gap: 2px; }
     .hud :global(.pxi) { width: 18px; height: 18px; }
     .caption { margin: -28px 10px 0; }
   }

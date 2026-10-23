@@ -148,7 +148,7 @@ export const SYMBOLS: Record<Reel, string[]> = {
 };
 
 /** HUD icons (same pixel-grid format as the reel symbols). */
-export const ICONS: Record<'coin' | 'moon' | 'sun', string[]> = {
+export const ICONS: Record<'coin' | 'moon' | 'sun' | 'heart', string[]> = {
   coin: [
     '..kkkkk..',
     '.kyYYyyk.',
@@ -181,5 +181,16 @@ export const ICONS: Record<'coin' | 'moon' | 'sun', string[]> = {
     '...kkk...',
     '.y.....y.',
     '....y....',
+  ],
+  heart: [
+    '.kk...kk.',
+    'kRrk.krrk',
+    'kRrrkrrrk',
+    'krrrrrrdk',
+    '.krrrrdk.',
+    '..krrdk..',
+    '...kdk...',
+    '....k....',
+    '.........',
   ],
 };
