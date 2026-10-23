@@ -1,14 +1,14 @@
 ---
 // The game in motion, right after the opening: ten seconds cut from the game's own scripted renders.
-// The clip is 960x540: the game draws its world at that size and doubles it to 1920x1080, so halving the render
-// loses nothing. It is shown at exactly 960 px (2 device px per pixel on retina) where it fits.
+// The clip is the game's own 1920x1080 render (every game pixel a clean 2x2 block), shown at most 960 CSS px wide:
+// one video pixel per device pixel on retina, a plain 2:1 reduction on 1x screens, so the browser never upscales it.
 // Sources load once the clip comes within reach of the screen. With reduced motion it waits on the poster
 // until the visitor presses play; every visitor can pause it. Without JS the noscript copy plays with controls.
 const POSTER = '/raccoon-heist/gameplay-poster.webp';
-// H.264 only: a VP9 encode came out larger at the same quality for this much pixel detail.
+// H.264 only: VP9 and AV1 encodes came out softer at the same size for this much pixel detail.
 const SOURCES = [{ src: '/raccoon-heist/gameplay.mp4', type: 'video/mp4' }];
 const LABEL =
-  'Raccoon Heist gameplay, ten seconds, no sound: Rocco throws cards into a crowd of about a thousand rats, a slot machine hits 777 and floods the floor with coins, rats and walking dice take critical hits, and the night report reads Night 1 paid.';
+  'Raccoon Heist gameplay, ten seconds, no sound: Rocco throws cards at the rats closing in, a slot machine pays 777 and floods the floor with coins while rats and walking dice close in, a crowd of about a thousand rats presses toward him, and the night report reads Night 1 paid.';
 ---
 
 <section id="footage" class="rh-sec footage" aria-labelledby="footage-title">
@@ -29,15 +29,15 @@ const LABEL =
           playsinline
           preload="metadata"
           poster={POSTER}
-          width="960"
-          height="540"
+          width="1920"
+          height="1080"
           aria-label={LABEL}
           data-footage-video
         >
           {SOURCES.map((s) => <source data-src={s.src} type={s.type} />)}
         </video>
         <noscript>
-          <video class="footage-video" muted loop playsinline controls preload="metadata" poster={POSTER} width="960" height="540" aria-label={LABEL}>
+          <video class="footage-video" muted loop playsinline controls preload="metadata" poster={POSTER} width="1920" height="1080" aria-label={LABEL}>
             {SOURCES.map((s) => <source src={s.src} type={s.type} />)}
           </video>
         </noscript>
