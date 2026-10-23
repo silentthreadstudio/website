@@ -1,0 +1,149 @@
+---
+// The game in motion, right after the opening: ten seconds cut from the game's own scripted renders.
+// The clip is 960x540: the game draws its world at that size and doubles it to 1920x1080, so halving the render
+// loses nothing. It is shown at exactly 960 px (2 device px per pixel on retina) where it fits.
+// Sources load once the clip comes within reach of the screen. With reduced motion it waits on the poster
+// until the visitor presses play; every visitor can pause it. Without JS the noscript copy plays with controls.
+const POSTER = '/raccoon-heist/gameplay-poster.webp';
+// H.264 only: a VP9 encode came out larger at the same quality for this much pixel detail.
+const SOURCES = [{ src: '/raccoon-heist/gameplay.mp4', type: 'video/mp4' }];
+const LABEL =
+  'Raccoon Heist gameplay, ten seconds, no sound: Rocco throws cards into a crowd of about a thousand rats, a slot machine hits 777 and floods the floor with coins, rats and walking dice take critical hits, and the night report reads Night 1 paid.';
+---
+
+<section id="footage" class="rh-sec footage" aria-labelledby="footage-title">
+  <div class="rh-wrap footage-grid">
+    <div class="rh-head footage-head">
+      <p class="rh-kicker">From the current build</p>
+      <h2 id="footage-title" class="rh-h2">Ten seconds on the floor</h2>
+      <p class="rh-lede">A deck of cards against a thousand rats, a 777 on the slots, and the night paid.</p>
+    </div>
+
+    <figure class="footage-fig" data-footage>
+      <div class="footage-frame">
+        <video
+          class="footage-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          poster={POSTER}
+          width="960"
+          height="540"
+          aria-label={LABEL}
+          data-footage-video
+        >
+          {SOURCES.map((s) => <source data-src={s.src} type={s.type} />)}
+        </video>
+        <noscript>
+          <video class="footage-video" muted loop playsinline controls preload="metadata" poster={POSTER} width="960" height="540" aria-label={LABEL}>
+            {SOURCES.map((s) => <source src={s.src} type={s.type} />)}
+          </video>
+        </noscript>
+      </div>
+      <figcaption class="footage-cap">In-game footage · in development</figcaption>
+      <button class="footage-toggle" type="button" hidden data-footage-toggle data-playing="false">
+        <span class="footage-icon" aria-hidden="true"></span><span data-footage-word>Play</span>
+      </button>
+    </figure>
+  </div>
+</section>
+
+<style>
+  /* Dusk carries on from the hero into the Boss's office below. */
+  .footage { background: linear-gradient(to bottom, #24152F, #1A1229 50%, #24152F); }
+  .footage-grid { display: grid; gap: clamp(1.5rem, 4vw, 3rem); align-items: center; }
+  .footage-head { margin-bottom: 0; }
+  /* Wide screens: the heading beside the clip, the clip at exactly 960 px inside its 2 px frame. */
+  @media (min-width: 1280px) { .footage-grid { grid-template-columns: minmax(0, 1fr) 964px; } }
+
+  /* The frame, then a strip under it: the label on the left, pause / play on the right. Nothing covers the game. */
+  .footage-fig {
+    margin: 0; width: 100%; max-width: 964px; justify-self: center;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 14px 12px;
+  }
+  .footage-frame {
+    grid-column: 1 / -1; grid-row: 1; position: relative;
+    border: 2px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); background: #07040F;
+  }
+  .footage-video {
+    display: block; width: 100%; height: auto; aspect-ratio: 16 / 9;
+    image-rendering: pixelated;
+  }
+  html.js .footage-frame > noscript { display: none; }
+  html:not(.js) [data-footage-video] { display: none; }
+
+  .footage-cap {
+    justify-self: start; margin: 0;
+    font: 400 0.7rem/1 var(--pixel); text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text); background: rgb(20 16 31 / 0.8); padding: 6px 8px; border: 2px solid var(--ink);
+  }
+  .footage-toggle {
+    cursor: pointer; display: inline-flex; align-items: center; gap: 8px; min-height: 36px;
+    font: 700 0.75rem/1 var(--pixel); text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--text); background: var(--slate); padding: 8px 10px;
+    border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink);
+  }
+  .footage-toggle:hover { color: var(--ink); background: var(--gold); }
+  .footage-toggle[hidden] { display: none; }
+  /* Paused: a play triangle. Playing: two pause bars. */
+  .footage-icon { width: 10px; height: 12px; background: currentColor; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+  .footage-toggle[data-playing='true'] .footage-icon {
+    clip-path: polygon(0 0, 35% 0, 35% 100%, 0 100%, 0 0, 65% 0, 100% 0, 100% 100%, 65% 100%, 65% 0);
+  }
+  /* With reduced motion the poster waits behind a bigger play control in the middle of the frame. */
+  .footage-fig[data-state='poster'] .footage-toggle {
+    grid-column: 1 / -1; grid-row: 1; align-self: center; justify-self: center; position: relative; z-index: 1;
+    padding: 14px 18px; font-size: 0.9rem;
+    color: var(--ink); background: var(--gold); box-shadow: inset 2px 2px 0 var(--gold-l), 5px 5px 0 var(--ink);
+  }
+  @media (max-width: 480px) { .footage-cap { font-size: 0.6rem; letter-spacing: 0.02em; } }
+  /* The Boss's office follows with its own top padding. */
+  .footage { padding-bottom: clamp(32px, 6vh, 72px); }
+</style>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const frame = document.querySelector<HTMLElement>('[data-footage]');
+  const video = frame?.querySelector<HTMLVideoElement>('[data-footage-video]');
+  const toggle = frame?.querySelector<HTMLButtonElement>('[data-footage-toggle]');
+  const word = frame?.querySelector<HTMLElement>('[data-footage-word]');
+
+  if (frame && video && toggle && word) {
+    let loaded = false;
+    const load = () => {
+      if (loaded) return;
+      loaded = true;
+      video.querySelectorAll<HTMLSourceElement>('source[data-src]').forEach((s) => { s.src = s.dataset.src!; });
+      video.load();
+    };
+    const sync = () => {
+      const playing = !video.paused;
+      toggle.dataset.playing = String(playing);
+      toggle.setAttribute('aria-label', playing ? 'Pause the gameplay clip' : 'Play the gameplay clip');
+      word.textContent = playing ? 'Pause' : 'Play';
+      if (playing) frame.removeAttribute('data-state');
+    };
+    video.addEventListener('play', sync);
+    video.addEventListener('pause', sync);
+    toggle.addEventListener('click', () => {
+      if (video.paused) { load(); void video.play().catch(() => sync()); } else video.pause();
+    });
+
+    if (reduce) {
+      video.autoplay = false;
+      video.removeAttribute('autoplay');
+      frame.setAttribute('data-state', 'poster');
+    } else if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) { load(); io.disconnect(); }
+      }, { rootMargin: '600px 0px' });
+      io.observe(frame);
+    } else {
+      load();
+    }
+    toggle.hidden = false;
+    sync();
+  }
+</script>
