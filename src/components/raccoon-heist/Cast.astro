@@ -1,8 +1,8 @@
 ---
 // The cast: one line-up on one floor under the house lights, every figure at the SAME integer scale.
 // Hovering a character lifts them a step and turns their spotlight up. No pedestals.
-// Below it, the Rat Mob from the current build: the game's own walk sheets on a second floor, at 2x, never mixed
-// into the HD row. Their cells share one pixel density and one feet line, so their sizes are the game's.
+// Below it, the Rat Mob on a second floor: stills at the cast's pixel density, cut from each enemy's model sheet and
+// sized to the game's heights (the Big Rat the biggest, the dice the smallest).
 import Px from './Px.astro';
 import { CAST, CREW, SHEETS } from './data';
 
@@ -50,7 +50,7 @@ const crewH = Math.max(...CREW.map((c) => SHEETS[c.sheet].cell[1]));
         return (
           <li class:list={['member', { boss: c.boss }]} style={`--cw:${s.cell[0]}`}>
             <span class="spot" aria-hidden="true"></span>
-            <span class="figure"><Px sheet={c.sheet} loop={[0, s.frames - 1]} /></span>
+            <span class="figure"><Px sheet={c.sheet} /></span>
             <p class="plate">{c.name}</p>
             <p class:list={['quip', { sfx: c.sfx }]}>{c.line}</p>
           </li>
@@ -110,25 +110,24 @@ const crewH = Math.max(...CREW.map((c) => SHEETS[c.sheet].cell[1]));
   .boss .plate { background: var(--crim-d); color: var(--text); }
   .quip { margin: 0; max-width: 22ch; text-align: center; color: var(--text-dim); font-size: 0.95rem; line-height: 1.4; }
 
-  /* The Rat Mob: game sprites at 2x on their own floor. Their feet sit 2 art px above the cell bottom. */
+  /* The Rat Mob: hd stills on their own floor, same scale as the cast. */
   .crew-head { margin-top: clamp(72px, 12vh, 128px); }
   .crew-title { font-size: clamp(1.4rem, 3vw, 2.4rem); }
   /* clip: the end spotlights must not widen the scroll past the carpet. */
-  .crew { --px: 2; --minw: 150px; gap: clamp(4px, 0.8vw, 12px); overflow: clip; }
+  .crew { --minw: 150px; gap: clamp(4px, 0.8vw, 12px); overflow: clip; }
   .crew .member { align-content: start; }
-  .crew .figure { margin-bottom: calc(10px - 2px * var(--px)); filter: brightness(0.92); }
+  .crew .figure { filter: brightness(0.92); }
   .crew .member:hover .figure { filter: none; }
   .crew .plate { font-size: 0.72rem; }
   .crew .quip { max-width: 18ch; font-size: 0.9rem; }
   .quip.sfx { font-style: italic; }
 
   .swipe { display: none; margin: 14px var(--side-r) 0 var(--side-l); font: 400 0.75rem var(--pixel); text-transform: uppercase; color: var(--text-dim); }
-  @media (max-width: 1760px) {
-    .crew-scroll { scroll-snap-type: x mandatory; scroll-padding-inline: var(--side-l); }
-    .crew .member { scroll-snap-align: start; }
-    .crew { justify-content: flex-start; }
-    .crew-swipe { display: block; }
-  }
+  /* Eight hd figures are wider than any screen: the crew row always swipes. */
+  .crew-scroll { scroll-snap-type: x mandatory; scroll-padding-inline: var(--side-l); }
+  .crew .member { scroll-snap-align: start; }
+  .crew { justify-content: flex-start; }
+  .crew-swipe { display: block; }
   @media (max-width: 1240px) {
     .lineup-scroll { scroll-snap-type: x mandatory; scroll-padding-inline: var(--side-l); }
     .member { scroll-snap-align: start; }
