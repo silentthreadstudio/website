@@ -18,7 +18,7 @@ const layers = [
 ---
 
 <figure class:list={['heist', className]} data-heist>
-  <div class="heist-frame" role="img" aria-label="Concept art: Rocco the raccoon strikes a pose on a spotlit casino stage while Don Vermino's Rat Mob and dozens of glowing eyes watch from the dark.">
+  <div class="heist-frame" role="img" aria-label="Concept art: Rocco the raccoon strikes a pose on a spotlit casino stage while a rat thug in a black suit, Don Vermino and dozens of glowing eyes watch from the dark.">
     {layers.map((l) => (
       <img src={`/raccoon-heist/${l.id}.webp`} alt={l.alt} width="688" height="384" loading={loading} decoding="async" fetchpriority={l.id === 'background' && eager ? 'high' : 'low'} class={`hl hl-${l.id}`} data-layer={l.id} />
     ))}
