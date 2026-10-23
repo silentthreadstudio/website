@@ -54,15 +54,13 @@ export const CAST = [
   { sheet: 'vermino' as const, frame: 1, name: 'Don Vermino', line: 'A reasonable rat. Wants his envelope.', boss: true },
 ];
 
-/** Casino rooms (planned). Background crops are positions in the 688x384 room. */
-export const ROOMS = [
-  { name: 'The Lobby', adds: 'Where every run starts. One slot machine, three doors.', crop: [0.5, 0.75], start: true },
-  { name: 'Slot Room', adds: 'A second slot machine.', crop: [0.02, 0.6] },
-  { name: 'Bar', adds: 'A free drink every wave.', crop: [0.18, 0.12] },
-  { name: 'Back Room', adds: 'The Card Altar: a mini Deal on the floor.', crop: [0.08, 0.95] },
-  { name: 'Roulette Room', adds: 'A roulette table. Red or black.', crop: [0.98, 0.95] },
-  { name: 'VIP Lounge', adds: 'A second Crew slot.', crop: [0.5, 0.35] },
-  { name: 'Vault', adds: 'Start every run with gold.', vault: true },
+/** Casino zones, named as in the game. Background crops are positions in the 688x384 room. */
+export const ZONES = [
+  { name: '2nd Slot Machine', crop: [0.02, 0.6] },
+  { name: 'Roulette Table', crop: [0.98, 0.95] },
+  { name: 'Blackjack Table', crop: [0.08, 0.95] },
+  { name: 'The Bar', crop: [0.18, 0.12] },
+  { name: 'The VIP Room', crop: [0.5, 0.35] },
 ];
 
 /** Slot machine: cost and outcome weights from the current build. Gold amounts are the demo's. */

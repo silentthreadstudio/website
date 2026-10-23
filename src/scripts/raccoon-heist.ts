@@ -336,11 +336,12 @@ function dawnSignoff() {
 function growCasino() {
   const rooms = $$('[data-room]');
   if (!rooms.length) return;
-  const set = (n: number) => rooms.forEach((r, i) => { if (i === 0 || i < n) r.dataset.built = 'true'; else delete r.dataset.built; });
-  set(1);
+  // Every zone starts boarded up and gets built, in order, as the row scrolls through.
+  const set = (n: number) => rooms.forEach((r, i) => { if (i < n) r.dataset.built = 'true'; else delete r.dataset.built; });
+  set(0);
   ScrollTrigger.create({
     trigger: '[data-rooms]', start: 'top 80%', end: 'bottom 45%', scrub: true,
-    onUpdate: (self) => set(1 + Math.floor(self.progress * (rooms.length - 1) + 0.0001)),
+    onUpdate: (self) => set(Math.floor(self.progress * rooms.length + 0.0001)),
   });
 }
 

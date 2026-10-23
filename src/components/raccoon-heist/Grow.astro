@@ -1,9 +1,8 @@
 ---
-// Grow the casino (planned): from one dingy room to a grand casino, room by room.
-// Tiles use the game's skill-tree states: locked = line border, owned = gold border + gold link.
-// Each room is a crop of the teaser room at 1x; as you scroll they "get built" in order.
-import Px from './Px.astro';
-import { ROOMS } from './data';
+// Build the casino (in development): a boarded-up dump, rebuilt zone by zone.
+// Tiles use the game's skill-tree states: boarded = line border, built = gold border + gold link.
+// Each zone is a crop of the teaser room at 1x; as you scroll they "get built" in order.
+import { ZONES } from './data';
 ---
 
 <section id="grow" class="rh-sec grow" aria-labelledby="grow-title">
@@ -11,25 +10,20 @@ import { ROOMS } from './data';
     <div class="rh-head">
       <p class="rh-kicker">5 AM, between nights</p>
       <div class="rh-head-row">
-        <h2 id="grow-title" class="rh-h2">Grow the casino</h2>
-        <span class="chip chip-dim">Planned</span>
+        <h2 id="grow-title" class="rh-h2">Build the casino</h2>
+        <span class="chip chip-teal">In development</span>
       </div>
-      <p class="rh-lede">You start with one dingy room. Between nights you spend gold on new ones, and every room you build stays, even when the Boss takes the deed back. The rats never renovate.</p>
+      <p class="rh-lede">The casino Rocco wins is a boarded-up dump. Between nights he spends gold to rebuild it, zone by zone. The rats never renovate.</p>
     </div>
 
     <ol class="rooms" data-rooms>
-      {ROOMS.map((r, i) => (
-        <li class:list={['room', { 'room-start': r.start }]} data-room data-built={r.start ? 'true' : undefined} style={`--i:${i}`}>
-          <span class="room-art" aria-hidden="true" style={r.crop ? `--cx:${r.crop[0] * 100}%;--cy:${r.crop[1] * 100}%` : undefined}>
-            {r.vault && <Px sheet="lockbox" frame={4} class="vault-box" />}
-            {r.start && <span class="room-here">Start</span>}
-          </span>
-          <span class="room-name">{r.name}</span>
-          <span class="room-adds">{r.adds}</span>
+      {ZONES.map((z, i) => (
+        <li class="room" data-room style={`--i:${i}`}>
+          <span class="room-art" aria-hidden="true" style={`--cx:${z.crop[0] * 100}%;--cy:${z.crop[1] * 100}%`}></span>
+          <span class="room-name">{z.name}</span>
         </li>
       ))}
     </ol>
-    <p class="grow-foot">Every new room adds a door. More doors, more rats. More rats, more coins.</p>
   </div>
 </section>
 
@@ -37,7 +31,7 @@ import { ROOMS } from './data';
   .grow { background: linear-gradient(to bottom, var(--night), #2B2747 70%, #3d2a4f); }
   .rooms {
     list-style: none; margin: 0; padding: 0;
-    display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: clamp(14px, 1.8vw, 24px);
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(14px, 1.8vw, 24px);
   }
   .room { position: relative; display: grid; gap: 8px; align-content: start; }
   /* Links between rooms, like the skill tree: locked line, owned gold. */
@@ -46,7 +40,6 @@ import { ROOMS } from './data';
     background: var(--line-g);
   }
   .room[data-built='true']:not(:last-child)::after { height: 4px; margin-top: -1px; background: var(--gold); }
-  /* Tall enough for the vault's lockbox (120 px) at every width. */
   .rooms { --art-h: clamp(128px, 10vw, 150px); }
   .room-art {
     position: relative; display: grid; place-items: center; height: var(--art-h); overflow: hidden;
@@ -56,25 +49,13 @@ import { ROOMS } from './data';
     filter: grayscale(1) brightness(0.45);
     transition: filter 0.4s steps(4), border-color 0.4s steps(2);
   }
-  /* Built rooms get grander down the line: each a little brighter and warmer than the last. */
+  /* Built zones get grander down the line: each a little brighter and warmer than the last. */
   .room[data-built='true'] .room-art {
     border: 2px solid var(--ink); box-shadow: inset 0 0 0 3px var(--gold), 4px 4px 0 var(--ink), 0 0 calc(var(--i) * 5px) rgb(255 201 60 / 0.25);
     filter: brightness(calc(0.8 + var(--i) * 0.07)) saturate(calc(0.75 + var(--i) * 0.08));
   }
-  /* The lobby is the dump you start in: lit, but dingy. */
-  .room-start .room-art, :global(html) .room-start[data-built='true'] .room-art { filter: saturate(0.55) brightness(0.75); }
-  .room-here {
-    position: absolute; left: 6px; top: 6px; font: 700 0.65rem/1 var(--pixel); text-transform: uppercase;
-    background: var(--gold); color: var(--ink); padding: 5px 6px; border: 2px solid var(--ink);
-  }
-  .vault-box { position: relative; }
-  .room-art:has(.vault-box) {
-    background: repeating-linear-gradient(0deg, #2B2747 0 18px, #24203d 18px 20px), var(--slate);
-  }
   .room-name { font: 700 0.85rem/1.2 var(--pixel); text-transform: uppercase; color: var(--text-dim); }
   .room[data-built='true'] .room-name { color: var(--gold-l); }
-  .room-adds { font-size: 0.9rem; line-height: 1.4; color: var(--text-dim); }
-  .grow-foot { margin: 2.2rem 0 0; font: 700 clamp(0.9rem, 1.4vw, 1.1rem)/1.5 var(--pixel); color: var(--text); max-width: 60ch; }
 
   /* Without JS (or with reduced motion), the casino is already grown. */
   :global(html:not(.js-motion)) .room .room-art { border: 2px solid var(--ink); box-shadow: inset 0 0 0 3px var(--gold), 4px 4px 0 var(--ink); filter: brightness(calc(0.8 + var(--i) * 0.07)) saturate(calc(0.75 + var(--i) * 0.08)); }
