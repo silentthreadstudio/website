@@ -1,11 +1,14 @@
 ---
 // The cast: one line-up on one floor under the house lights, every figure at the SAME integer scale.
 // Hovering a character lifts them a step and turns their spotlight up. No pedestals.
+// Below it, the Rat Mob from the current build: the game's own walk sheets on a second floor, at 2x, never mixed
+// into the HD row. Their cells share one pixel density and one feet line, so their sizes are the game's.
 import Px from './Px.astro';
-import { CAST, SHEETS } from './data';
+import { CAST, CREW, SHEETS } from './data';
 
 // The tallest figure sets the floor line, so a resized sprite never breaks the line-up.
 const maxH = Math.max(...CAST.map((c) => SHEETS[c.sheet].cell[1]));
+const crewH = Math.max(...CREW.map((c) => SHEETS[c.sheet].cell[1]));
 ---
 
 <section id="cast" class="rh-sec cast" aria-labelledby="cast-title">
@@ -29,6 +32,33 @@ const maxH = Math.max(...CAST.map((c) => SHEETS[c.sheet].cell[1]));
     </ul>
   </div>
   <p class="swipe" aria-hidden="true">Swipe the line-up &rarr;</p>
+
+  <div class="cast-head crew-head"><div class="rh-wrap">
+    <div class="rh-head">
+      <p class="rh-kicker">From the current build</p>
+      <div class="rh-head-row">
+        <h3 id="crew-title" class="rh-h2 crew-title">The Rat Mob</h3>
+        <span class="chip chip-teal">In development</span>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="lineup-scroll crew-scroll" tabindex="0" role="region" aria-labelledby="crew-title">
+    <ul class="lineup crew" style={`--mh:${crewH}`}>
+      {CREW.map((c) => {
+        const s = SHEETS[c.sheet];
+        return (
+          <li class:list={['member', { boss: c.boss }]} style={`--cw:${s.cell[0]}`}>
+            <span class="spot" aria-hidden="true"></span>
+            <span class="figure"><Px sheet={c.sheet} loop={[0, s.frames - 1]} /></span>
+            <p class="plate">{c.name}</p>
+            <p class:list={['quip', { sfx: c.sfx }]}>{c.line}</p>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+  <p class="swipe crew-swipe" aria-hidden="true">Swipe the crew &rarr;</p>
 </section>
 
 <style>
@@ -38,7 +68,7 @@ const maxH = Math.max(...CAST.map((c) => SHEETS[c.sheet].cell[1]));
   .lineup-scroll { overflow-x: auto; scrollbar-width: thin; scrollbar-color: var(--slate-hi) transparent; }
   .lineup-scroll:focus-visible { outline-offset: -3px; }
   .lineup {
-    --px: 1;
+    --px: 1; --minw: 170px;
     position: relative; list-style: none; margin: 0 auto; padding: 60px var(--side-r) 8px var(--side-l);
     display: flex; justify-content: center; align-items: stretch; gap: clamp(4px, 1.2vw, 18px);
     min-width: max-content;
@@ -51,7 +81,7 @@ const maxH = Math.max(...CAST.map((c) => SHEETS[c.sheet].cell[1]));
   }
   .member {
     position: relative; display: grid; grid-template-rows: calc(var(--mh) * var(--px) * 1px + 20px) auto auto; justify-items: center; gap: 12px;
-    width: max(calc(var(--cw) * var(--px) * 1px), 170px);
+    width: max(calc(var(--cw) * var(--px) * 1px), var(--minw));
   }
   .figure {
     position: relative; z-index: 1; align-self: end; line-height: 0; margin-bottom: 10px;
@@ -80,7 +110,25 @@ const maxH = Math.max(...CAST.map((c) => SHEETS[c.sheet].cell[1]));
   .boss .plate { background: var(--crim-d); color: var(--text); }
   .quip { margin: 0; max-width: 22ch; text-align: center; color: var(--text-dim); font-size: 0.95rem; line-height: 1.4; }
 
+  /* The Rat Mob: game sprites at 2x on their own floor. Their feet sit 2 art px above the cell bottom. */
+  .crew-head { margin-top: clamp(72px, 12vh, 128px); }
+  .crew-title { font-size: clamp(1.4rem, 3vw, 2.4rem); }
+  /* clip: the end spotlights must not widen the scroll past the carpet. */
+  .crew { --px: 2; --minw: 150px; gap: clamp(4px, 0.8vw, 12px); overflow: clip; }
+  .crew .member { align-content: start; }
+  .crew .figure { margin-bottom: calc(10px - 2px * var(--px)); filter: brightness(0.92); }
+  .crew .member:hover .figure { filter: none; }
+  .crew .plate { font-size: 0.72rem; }
+  .crew .quip { max-width: 18ch; font-size: 0.9rem; }
+  .quip.sfx { font-style: italic; }
+
   .swipe { display: none; margin: 14px var(--side-r) 0 var(--side-l); font: 400 0.75rem var(--pixel); text-transform: uppercase; color: var(--text-dim); }
+  @media (max-width: 1760px) {
+    .crew-scroll { scroll-snap-type: x mandatory; scroll-padding-inline: var(--side-l); }
+    .crew .member { scroll-snap-align: start; }
+    .crew { justify-content: flex-start; }
+    .crew-swipe { display: block; }
+  }
   @media (max-width: 1240px) {
     .lineup-scroll { scroll-snap-type: x mandatory; scroll-padding-inline: var(--side-l); }
     .member { scroll-snap-align: start; }

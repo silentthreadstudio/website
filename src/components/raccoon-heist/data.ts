@@ -15,6 +15,12 @@ const hd = (id: string, frames: number, cell: [number, number], fps = 1): Sheet 
   src: `/raccoon-heist/hd/${id}.webp`, frames, cell, fps,
 });
 
+// The enemy crew straight from the current build: the game's own walk sheets, 1 px per art pixel, lossless.
+// Cells and fps from each sheet's .json; every sheet has its feet 2 px above the cell bottom.
+const crew = (id: string, frames: number, cell: [number, number], fps: number): Sheet => ({
+  src: `/raccoon-heist/crew/${id}.webp`, frames, cell, fps,
+});
+
 export const SHEETS = {
   // Key-art Rocco only. Never rocco_cast / rocco_shrug.
   rocco_hero: hd('rocco_hero', 1, [243, 302]),
@@ -30,6 +36,15 @@ export const SHEETS = {
   lockbox: hd('lockbox', 5, [144, 120], 10),
   coin: hd('coin_m', 6, [27, 26], 10),
   cards: hd('cards_s', 4, [53, 61]),
+  dice: crew('dice', 6, [81, 105], 10),
+  thug_walk: crew('thug_walk', 6, [74, 85], 8),
+  card_shark_walk: crew('card_shark_walk', 4, [84, 96], 6),
+  bouncer_rat_walk: crew('bouncer_rat_walk', 4, [79, 92], 6),
+  loan_shark_sprint: crew('loan_shark_sprint', 4, [73, 87], 10),
+  bookie_walk: crew('bookie_walk', 4, [95, 101], 6),
+  roller_valet_glide: crew('roller_valet_glide', 4, [91, 88], 8),
+  chip_golem_walk: crew('chip_golem_walk', 4, [75, 100], 6),
+  big_rat_walk: crew('big_rat_walk', 4, [144, 133], 6),
 } satisfies Record<string, Sheet>;
 
 export type SheetId = keyof typeof SHEETS;
@@ -48,6 +63,19 @@ export const CAST = [
   { sheet: 'rocco_hero' as const, name: 'Rocco', tag: '"The Bandit"', line: 'Small-time thief. Too lucky to be honest.' },
   { sheet: 'rat_thug' as const, name: 'The Thug', line: 'Hired muscle in a black suit. Paid in advance.' },
   { sheet: 'vermino' as const, frame: 1, name: 'Don Vermino', line: 'A reasonable rat. Wants his envelope.', boss: true },
+];
+
+/** The Rat Mob, in the order they show up, at game size. Lines are the story hooks from the game's enemy brief. */
+export const CREW = [
+  { sheet: 'dice' as const, name: 'Walking Dice', line: 'Mob dice that got too lucky and grew legs.' },
+  { sheet: 'thug_walk' as const, name: 'Rat Thug', line: 'Paid in advance. Knock him out and his pockets spill.' },
+  { sheet: 'card_shark_walk' as const, name: 'Card Shark', line: '"Tut-tut."' },
+  { sheet: 'bouncer_rat_walk' as const, name: 'Bouncer Rat', line: '"Name\'s not on the list."' },
+  { sheet: 'loan_shark_sprint' as const, name: 'Loan Shark', line: '"Interest!"' },
+  { sheet: 'bookie_walk' as const, name: 'Bookie', line: '"Ten to one on the rat!"' },
+  { sheet: 'roller_valet_glide' as const, name: 'Roller Valet', line: '"Your car\'s ready. Your face isn\'t."' },
+  { sheet: 'chip_golem_walk' as const, name: 'Chip Golem', line: 'clack-clack.', sfx: true },
+  { sheet: 'big_rat_walk' as const, name: 'Big Rat', line: '"That\'s a Big Rat. Even I knock first."', boss: true },
 ];
 
 /** Casino zones, named as in the game. Background crops are positions in the 688x384 room. */
