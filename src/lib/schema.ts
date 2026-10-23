@@ -52,7 +52,7 @@ export const videoGame = (description: string, image: string): Node => ({
   url: abs(GAME.href),
   description,
   image: abs(image),
-  genre: 'Roguelite',
+  genre: ['Incremental', 'Roguelite'],
   inLanguage: 'en',
   author: { '@id': ORG_ID },
   publisher: { '@id': ORG_ID },

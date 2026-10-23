@@ -10,7 +10,7 @@
 
 ## Games
 
-- [Raccoon Heist](https://silentthreadstudio.com/games/raccoon-heist): A raccoon wins the worst casino in town. The Rat Mob wants their cut. A heist roguelite: defend the casino every night and pay the Rat Boss, Don Vermino, by dawn. In development, coming to Steam. No release date announced.
+- [Raccoon Heist](https://silentthreadstudio.com/games/raccoon-heist): A raccoon wins the worst casino in town. The Rat Mob wants their cut. An active incremental roguelite: defend the casino night after night and pay the Rat Boss, Don Vermino, his weekly bill. In development, coming to Steam. No release date announced.
 
 ## The Lab
 
