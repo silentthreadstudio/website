@@ -2,6 +2,7 @@
 title: "Raccoon Heist devlog #1: one night works"
 description: "What Raccoon Heist is, what already plays, and what the current milestone adds."
 pubDate: 2026-10-21
+updatedDate: 2026-10-23
 type: devlog
 tags: [raccoon-heist, devlog]
 game: raccoon-heist
@@ -11,6 +12,8 @@ coverAlt: "Rocco the raccoon, a coin pouch on his belt, stands on the casino car
 coverLabel: "Concept art"
 draft: false
 ---
+
+> **Update, 23 October 2026:** the design has moved on since this post. Powers, charms and the Boss's Deal became something else, and the bill is now weekly. The [game page](/games/raccoon-heist) has the current picture.
 
 <!-- Image slot D1-1 (cover): Raccoon Heist key art. Label: Concept art. -->
 

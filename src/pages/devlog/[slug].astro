@@ -88,6 +88,9 @@ const showCover = !(c && !c.todo && post.body?.includes(`](${c.src}`));
   .post-body :global(strong) { font-weight: 700; color: var(--fg); }
   .post-body :global(a) { color: inherit; text-decoration: underline 1px var(--fg-3); text-underline-offset: 4px; }
   .post-body :global(a:hover) { text-decoration-color: var(--signal); }
+  /* A dated note at the top of a post, e.g. when the design has moved on since it was written. */
+  .post-body :global(blockquote) { margin: 0 0 1.6em; padding: 0.9em 1.1em; border-left: 3px solid var(--signal); background: var(--surface); color: var(--fg-2); font-size: 0.95em; }
+  .post-body :global(blockquote p) { margin: 0; }
 
   .post-foot { display: flex; flex-wrap: wrap; gap: 1rem 2rem; margin-top: 3.5rem; padding-top: 2rem; border-top: 1px solid var(--surface); }
 </style>
