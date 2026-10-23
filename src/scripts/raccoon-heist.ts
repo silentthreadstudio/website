@@ -278,7 +278,7 @@ function night() {
     const flash = (at: number) => tl.to(thug, { '--hit': 1, duration: 0.02 }, at).to(thug, { '--hit': 0, duration: 0.04 }, at + 0.03);
     const popAt = (el: HTMLElement, at: number) => tl
       .set(el, { '--o': 1 }, at).fromTo(el, { '--t': 0 }, { '--t': 1, duration: 0.14 }, at).set(el, { '--o': 0 }, at + 0.15);
-    // Card order in the markup: A spade (0), A diamond (1), K heart (2). Throw K, A, A.
+    // Card order in the markup: A spade (0, blue as in the game), A diamond (1), K heart (2). Throw K, A, A.
     [2, 0, 1].forEach((ci, n) => tl.to(cards[ci], { '--t': 1, duration: 0.2 }, 0.04 + n * 0.22));
     flash(0.24); popAt(hit, 0.24);
     flash(0.46); popAt(crit, 0.46);
