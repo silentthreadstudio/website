@@ -6,7 +6,7 @@ import { FOUNDER, GAME, LAB, NOW, ORIGIN, ROAD } from '../data/home';
 import { lastPublicPush } from '../lib/github';
 import { founder } from '../lib/schema';
 import { ROAD_ICONS } from '../data/road-icons';
-import { CONTACT_EMAIL, NEWSLETTER_ENDPOINT, SOCIAL, TIMEZONE } from '../site';
+import { CONTACT_EMAIL, SOCIAL, TIMEZONE } from '../site';
 
 const push = await lastPublicPush();
 const pushAt = push
@@ -152,22 +152,16 @@ const pushAt = push
     <div class="contact-main">
       <p class="label sec-label" style="--drop:16vh" data-sec><span class="sec-thread" aria-hidden="true"></span>06 / Contact</p>
       <h2 id="contact-title" class="h2" data-reveal>Hear it first.</h2>
-      {NEWSLETTER_ENDPOINT ? (
-        <form class="signup" action={NEWSLETTER_ENDPOINT} method="post">
-          <label for="signup-email">Email</label>
-          <div class="signup-row">
-            <input id="signup-email" name="email_address" type="email" required autocomplete="email" placeholder="you@example.com" />
-            <button type="submit">Subscribe</button>
-          </div>
-          <p class="fine">News from the studio. No spam, unsubscribe any time. By subscribing you accept the <a href="/privacy">privacy policy</a>.</p>
-        </form>
-      ) : (
-        <p class="contact-lede">News from the studio goes out on X first.<br /><a class="link" href="https://x.com/silentthreadhq" rel="me noopener">Follow @silentthreadhq <span aria-hidden="true">↗</span></a></p>
-      )}
+      <p class="contact-lede">News from the studio goes out here first.</p>
+      <ul class="follow" data-reveal-group>
+        {SOCIAL.filter((s) => s.follow).map((s) => (
+          <li><a href={s.href} rel="me noopener"><span class="follow-name">{s.label.split(' ')[0]}</span> <span class="follow-handle">{s.label.split(' ').slice(1).join(' ')}</span> <span aria-hidden="true">↗</span></a></li>
+        ))}
+      </ul>
     </div>
     <dl class="contact-list" data-reveal-group>
       <div><dt>Email</dt><dd><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></dd></div>
-      {SOCIAL.map((s) => (
+      {SOCIAL.filter((s) => !s.follow).map((s) => (
         <div><dt>{s.label.split(' ')[0]}</dt><dd><a href={s.href} rel="me noopener">{s.label.split(' ').slice(1).join(' ') || s.href.replace('https://', '')}</a></dd></div>
       ))}
       <div><dt>Press</dt><dd><a href="/press">Press kit</a></dd></div>
@@ -325,13 +319,12 @@ const pushAt = push
   .contact { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 3rem 8vw; }
   .contact-main { display: grid; gap: 1.2rem; align-content: start; }
   .contact-lede { margin: 0; max-width: 40ch; font-size: 1.15rem; }
-  .contact-lede .link { display: inline-block; margin-top: 1.2rem; }
-  .signup { display: grid; gap: 0.6rem; max-width: 30rem; }
-  .signup label { font: 600 0.7rem var(--font-mono); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--fg-3); }
-  .signup-row { display: flex; border: 1px solid var(--surface); }
-  .signup input { flex: 1; min-width: 0; background: none; border: 0; color: var(--fg); font: 400 1rem var(--font-body); padding: 14px; }
-  .signup button { background: var(--fg); color: var(--bg); font: 600 0.75rem var(--font-mono); letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 0 18px; }
-  .fine { margin: 0; font-size: 0.85rem; color: var(--fg-3); }
+  .follow { list-style: none; margin: 0.6rem 0 0; padding: 0; display: grid; border-top: 1px solid var(--surface); max-width: 30rem; }
+  .follow li { border-bottom: 1px solid var(--surface); }
+  .follow a { display: flex; align-items: baseline; gap: 0.9rem; padding-block: 16px; text-decoration: none; }
+  .follow-name { font-size: clamp(1.3rem, 2.2vw, 1.75rem); font-weight: 700; }
+  .follow-handle { flex: 1; font: 400 0.8rem var(--font-mono); color: var(--fg-3); }
+  .follow a:hover .follow-name { text-decoration: underline; text-decoration-color: var(--signal); }
   .contact-list div { grid-template-columns: 6rem minmax(0, 1fr); }
 
   @media (max-width: 960px) {

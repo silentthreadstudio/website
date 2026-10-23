@@ -2,6 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/subscribed", "destination": "/", "permanent": true },
+    { "source": "/confirmed", "destination": "/", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/_astro/(.*)",

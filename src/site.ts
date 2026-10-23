@@ -8,14 +8,14 @@ export const SITE = {
   description: 'Silent Thread is a game studio and dev-tools Lab from Colombia. Quiet name. Loud worlds.',
 };
 
+// follow: listed under "Hear it first." in Contact, where studio news goes out.
 export const SOCIAL = [
-  { label: 'X @silentthreadhq', href: 'https://x.com/silentthreadhq' },
+  { label: 'X @silentthreadhq', href: 'https://x.com/silentthreadhq', follow: true },
+  { label: 'TikTok @silent.thread.studio', href: 'https://www.tiktok.com/@silent.thread.studio', follow: true },
+  { label: 'LinkedIn Silent Thread', href: 'https://www.linkedin.com/company/146766146', follow: true },
   { label: 'GitHub', href: 'https://github.com/silentthreadstudio' },
   { label: 'Founder @Codestz_Dev', href: 'https://x.com/Codestz_Dev' },
 ];
 
 // Shown in Contact only when set.
 export const CONTACT_EMAIL = 'hello@silentthreadstudio.com';
-
-// Newsletter form (Kit, double opt-in) posts here. Empty: Contact points to X instead.
-export const NEWSLETTER_ENDPOINT = 'https://app.kit.com/forms/10078209/subscriptions';
