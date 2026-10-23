@@ -21,9 +21,7 @@ export const SHEETS = {
   rocco_fight: hd('rocco_fight', 1, [289, 302]),
   rocco_coins: hd('rocco_coins', 1, [240, 302]),
   rocco_payup: hd('rocco_payup', 1, [241, 302]),
-  rat_dealer: hd('rat_dealer', 1, [202, 317]),
   rat_thug: hd('rat_thug', 1, [177, 303]),
-  rats_right_pair: hd('rats_right_pair', 1, [316, 361]),
   vermino: hd('vermino', 2, [255, 300]),
   // In-game sheets (asset pass 1). vermino_bust: idle 0-3, talk 4-5. slot_machine: idle 0-1, pull 2-4, payout 5-6.
   // lockbox: locked, unlock, ajar, light, loot.
@@ -48,9 +46,7 @@ export const CATCH_LINES = [
 
 export const CAST = [
   { sheet: 'rocco_hero' as const, name: 'Rocco', tag: '"The Bandit"', line: 'Small-time thief. Too lucky to be honest.' },
-  { sheet: 'rat_dealer' as const, name: 'The Card Shark', line: 'Keeps his distance. Flicks cards. Tuts.' },
   { sheet: 'rat_thug' as const, name: 'The Thug', line: 'Hired muscle in a black suit. Paid in advance.' },
-  { sheet: 'rats_right_pair' as const, name: 'Loan Shark & Bouncer', line: '"Interest!" / "Name\'s not on the list."' },
   { sheet: 'vermino' as const, frame: 1, name: 'Don Vermino', line: 'A reasonable rat. Wants his envelope.', boss: true },
 ];
 
