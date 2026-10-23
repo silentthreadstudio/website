@@ -1,6 +1,6 @@
 ---
 // The loop as one night in one casino. A HUD styled like the game's (coins, protection bar, time to dawn)
-// rides along and fills as you scroll: Fight -> Grab the coins -> Pay by dawn.
+// rides along and fills as you scroll: Fight -> Grab the coins -> Pay by Friday.
 // Every scene is a stage measured in art pixels (U = --px screen px). All geometry comes from the sheets'
 // cell sizes (data.ts) passed in as CSS vars, so swapping a sprite keeps the anchors.
 // Each moving piece is driven by one var (--t, --ko, --hit, ...). CSS defaults are the composed frame;
@@ -31,7 +31,7 @@ const RAIN = Array.from({ length: 16 }, (_, i) => ({ fx: ((i * 0.618) % 1) * 0.9
   <div class="rh-wrap rh-head night-head">
     <p class="rh-kicker">Midnight</p>
     <h2 id="night-title" class="rh-h2">One night, start to dawn</h2>
-    <p class="rh-lede">Every night the Rat Mob sends its boys to wreck the place. Every dawn the Boss comes for his envelope.</p>
+    <p class="rh-lede">Every night the Rat Mob sends its boys to wreck the place. Come Friday, the Boss wants his envelope.</p>
   </div>
 
   <div class="track" data-night>
@@ -77,7 +77,7 @@ const RAIN = Array.from({ length: 16 }, (_, i) => ({ fx: ((i * 0.618) % 1) * 0.9
         <div class="caption panel">
           <p class="cap-n">01</p>
           <h3 class="cap-title">Fight</h3>
-          <p class="cap-text">Rocco fights with a deck of cards, and aces always hit hard. The Boss pays his goons in advance, so knock one out and his pockets spill.</p>
+          <p class="cap-text">Rocco fights with a deck of cards. The Boss pays his goons in advance, so knock one out and his pockets spill.</p>
         </div>
       </li>
 
@@ -95,11 +95,11 @@ const RAIN = Array.from({ length: 16 }, (_, i) => ({ fx: ((i * 0.618) % 1) * 0.9
         <div class="caption panel">
           <p class="cap-n">02</p>
           <h3 class="cap-title">Grab the coins</h3>
-          <p class="cap-text">Every coin goes in the sack, and the sack is what the Boss collects. Spend it on tricks and machines instead, and you'd better win it back.</p>
+          <p class="cap-text">Every coin goes in the sack, and the sack is what pays the bill. Spend it on slots or the casino instead, and you'd better win it back.</p>
         </div>
       </li>
 
-      <!-- 03 Pay by dawn -->
+      <!-- 03 Pay by Friday -->
       <li class="beat" data-beat="pay">
         <div class="scene scene-pay" style={`--rw:${rpw};--rh:${rph};--vw:${vw};--vh:${vh}`}>
           <span class="dawn-light" data-dawn aria-hidden="true"></span>
@@ -112,8 +112,8 @@ const RAIN = Array.from({ length: 16 }, (_, i) => ({ fx: ((i * 0.618) % 1) * 0.9
         </div>
         <div class="caption panel">
           <p class="cap-n">03</p>
-          <h3 class="cap-title">Pay by dawn</h3>
-          <p class="cap-text">At dawn the Boss collects. Paid: the casino is yours for one more night, and tomorrow he wants more. Short: the deed goes back to him.</p>
+          <h3 class="cap-title">Pay by Friday</h3>
+          <p class="cap-text">Friday at dawn the Boss collects, and every week the bill is bigger. Paid: the casino is yours for another week. Short: you're run out of town.</p>
         </div>
       </li>
     </ol>

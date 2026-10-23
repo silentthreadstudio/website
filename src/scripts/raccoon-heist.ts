@@ -242,7 +242,7 @@ function night() {
   const coinsEl = $('[data-hud-coins]', hud)!, protEl = $('[data-hud-prot]', hud)!, timeEl = $('[data-hud-time]', hud)!;
   const fill = $('[data-hud-fill]', hud)!;
   const p = { fight: 0, grab: 0, pay: 0 };
-  const DEMAND = 500, NIGHT = 300;
+  const DEMAND = 500, NIGHT = 240;
 
   const renderHud = () => {
     const paid = p.pay >= 0.8;
@@ -304,7 +304,7 @@ function night() {
     }
   }
 
-  // 03 Pay by dawn: first light, the Boss's line, he tips his hat, PAID.
+  // 03 Pay by Friday: first light, the Boss's line, he tips his hat, PAID.
   {
     const light = $('[data-dawn]', pay)!, bubble = $('[data-bubble]', pay)!, stamp = $('[data-stamp]', pay)!;
     const boss = $('[data-boss-full] .px', pay)!;

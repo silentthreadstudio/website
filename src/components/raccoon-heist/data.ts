@@ -40,13 +40,13 @@ export const SHEETS = {
 export type SheetId = keyof typeof SHEETS;
 
 export const LOGLINE = 'A raccoon wins the worst casino in town. The Rat Mob wants their cut.';
-export const STATUS = 'The core loop is done. Now building upgrades, powers and juice.';
+export const STATUS = 'It is in development, and the devlog follows along.';
 
 /** Don Vermino, the night Rocco wins the deed. */
 export const CATCH_LINES = [
   'Winner takes the casino. Congratulations, kid.',
   'Nice place. Shame if something happened to it.',
-  "Protection's due at dawn. Every dawn.",
+  "The bill's due Friday. Every Friday.",
 ];
 
 export const POWERS = [
