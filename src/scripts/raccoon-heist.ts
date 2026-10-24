@@ -39,16 +39,22 @@ export function initRaccoonHeist() {
 
 /* ---------------------------------------------------------------- sprites */
 
-/** Below-the-fold sprite sheets load once the hero is done, then as they come within reach of the screen. */
+/** Below-the-fold sprite sheets load once the hero is done, then as they come within reach of the screen. A sideways
+ *  line-up loads whole when it does: its far members sit outside the scroller and would never intersect on their own. */
 function loadSprites() {
   const imgs = $$<HTMLImageElement>('img[data-src]');
   const show = (img: HTMLImageElement) => { img.src = img.dataset.src!; img.removeAttribute('data-src'); };
+  const reach = (img: HTMLImageElement): Element => img.closest('.lineup-scroll') ?? img;
   const start = () => {
     if (!('IntersectionObserver' in window)) { imgs.forEach(show); return; }
     const io = new IntersectionObserver((entries) => entries.forEach((e) => {
-      if (e.isIntersecting) { show(e.target as HTMLImageElement); io.unobserve(e.target); }
+      if (!e.isIntersecting) return;
+      const t = e.target;
+      if (t instanceof HTMLImageElement) show(t);
+      else t.querySelectorAll<HTMLImageElement>('img[data-src]').forEach(show);
+      io.unobserve(t);
     }), { rootMargin: '1600px 0px' });
-    imgs.forEach((img) => io.observe(img));
+    new Set(imgs.map(reach)).forEach((t) => io.observe(t));
   };
   if (document.readyState === 'complete') window.setTimeout(start, 250);
   else window.addEventListener('load', () => window.setTimeout(start, 250), { once: true });
