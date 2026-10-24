@@ -4,9 +4,11 @@
 // one video pixel per device pixel on retina, a plain 2:1 reduction on 1x screens, so the browser never upscales it.
 // Sources load once the clip comes within reach of the screen. With reduced motion it waits on the poster
 // until the visitor presses play; every visitor can pause it. Without JS the noscript copy plays with controls.
-const POSTER = '/raccoon-heist/gameplay-poster.webp';
+// `?v=`: bump with every recut so browsers and the CDN drop the old clip.
+const CLIP_V = '2026-10-24';
+const POSTER = `/raccoon-heist/gameplay-poster.webp?v=${CLIP_V}`;
 // H.264 only: VP9 and AV1 encodes came out softer at the same size for this much pixel detail.
-const SOURCES = [{ src: '/raccoon-heist/gameplay.mp4', type: 'video/mp4' }];
+const SOURCES = [{ src: `/raccoon-heist/gameplay.mp4?v=${CLIP_V}`, type: 'video/mp4' }];
 const LABEL =
   'Raccoon Heist gameplay, ten seconds, no sound: a crowd of about a thousand rats presses toward Rocco as he throws cards into it, he bets 60 gold at a slot machine and hits 777, coins flood the floor, the rats close in on him, and the night report reads Night 1 paid.';
 ---
