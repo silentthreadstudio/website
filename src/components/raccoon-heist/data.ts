@@ -30,15 +30,18 @@ export const SHEETS = {
   lockbox: hd('lockbox', 5, [144, 120], 10),
   coin: hd('coin_m', 6, [27, 26], 10),
   cards: hd('cards_s', 4, [53, 61]),
-  // The Rat Mob: stills cut from each enemy's approved model sheet (front view), hd tier, sized to the game's heights.
-  dice: hd('dice', 1, [259, 242]),
-  card_shark: hd('card_shark', 1, [297, 348]),
-  bouncer_rat: hd('bouncer_rat', 1, [315, 333]),
-  loan_shark: hd('loan_shark', 1, [264, 318]),
-  bookie: hd('bookie', 1, [355, 364]),
-  roller_valet: hd('roller_valet', 1, [300, 318]),
-  chip_golem: hd('chip_golem', 1, [319, 364]),
-  big_rat: hd('big_rat', 1, [443, 485]),
+  // The Rat Mob: the three-quarter figure of each approved model sheet, sampled on its own drawn grid and sized to
+  // the game's heights at the cast's scale (the key-art thug: 303 px for 75 game px).
+  dice: hd('dice', 1, [181, 275]),
+  card_shark: hd('card_shark', 1, [215, 339]),
+  bouncer_rat: hd('bouncer_rat', 1, [185, 319]),
+  loan_shark: hd('loan_shark', 1, [197, 327]),
+  bookie: hd('bookie', 1, [160, 327]),
+  roller_valet: hd('roller_valet', 1, [192, 327]),
+  trench_coat: hd('trench_coat', 1, [220, 424]),
+  runt: hd('runt', 1, [131, 242]),
+  enforcer: hd('enforcer', 1, [266, 473]),
+  big_rat: hd('big_rat', 1, [274, 497]),
 } satisfies Record<string, Sheet>;
 
 export type SheetId = keyof typeof SHEETS;
@@ -67,8 +70,10 @@ export const CREW = [
   { sheet: 'loan_shark' as const, name: 'Loan Shark', line: '"Interest!"' },
   { sheet: 'bookie' as const, name: 'Bookie', line: '"Ten to one on the rat!"' },
   { sheet: 'roller_valet' as const, name: 'Roller Valet', line: '"Your car\'s ready. Your face isn\'t."' },
-  { sheet: 'chip_golem' as const, name: 'Chip Golem', line: 'clack-clack.', sfx: true },
+  { sheet: 'trench_coat' as const, name: 'Rats in a Trench Coat', line: 'Three rats, one coat. Knock it down and it splits.' },
+  { sheet: 'runt' as const, name: 'The Runts', line: 'What falls out of the coat. Small and fast.' },
   { sheet: 'big_rat' as const, name: 'Big Rat', line: '"That\'s a Big Rat. Even I knock first."', boss: true },
+  { sheet: 'enforcer' as const, name: 'The Enforcer', line: '"Boss says. Pay."', boss: true },
 ];
 
 /** Casino zones, named as in the game. Background crops are positions in the 688x384 room. */

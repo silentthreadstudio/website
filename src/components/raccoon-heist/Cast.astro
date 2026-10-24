@@ -52,7 +52,7 @@ const crewH = Math.max(...CREW.map((c) => SHEETS[c.sheet].cell[1]));
             <span class="spot" aria-hidden="true"></span>
             <span class="figure"><Px sheet={c.sheet} /></span>
             <p class="plate">{c.name}</p>
-            <p class:list={['quip', { sfx: c.sfx }]}>{c.line}</p>
+            <p class="quip">{c.line}</p>
           </li>
         );
       })}
@@ -120,7 +120,6 @@ const crewH = Math.max(...CREW.map((c) => SHEETS[c.sheet].cell[1]));
   .crew .member:hover .figure { filter: none; }
   .crew .plate { font-size: 0.72rem; }
   .crew .quip { max-width: 18ch; font-size: 0.9rem; }
-  .quip.sfx { font-style: italic; }
 
   .swipe { display: none; margin: 14px var(--side-r) 0 var(--side-l); font: 400 0.75rem var(--pixel); text-transform: uppercase; color: var(--text-dim); }
   /* Eight hd figures are wider than any screen: the crew row always swipes. */
